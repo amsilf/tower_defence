@@ -1,0 +1,50 @@
+{
+	"name": "Saint-Petersurg ruins",
+
+	"params": {
+		"background": "resources/backgrounds/dvorchovaya_square.png",
+		
+		"waves": "resources/config/waves/02_saint_petersburg_waves.json",
+		"units": "resources/config/towers/towers.json",
+		"towers": "resources/config/units/units.json",
+		"dialogs": "resources/config/dialogs/02_saint_petersburg_dialogs.json",
+
+		"start_points": [
+			{
+				"waves": "sp_1, sp_3, sp_5, sp_7",
+				"start_x": "100",
+				"start_y": "100",
+				"end_x": "200",
+				"end_y": "200"
+			},
+			{
+				"waves" : "sp_2, sp_4, sp_6, sp_8",
+				"start_x": "100",
+				"start_y": "100",
+				"end_x": "200",
+				"end_y": "200"
+			}
+		],
+
+		"towers_slots": [
+			{
+				"ts_x": "0",
+				"ts_y": "0",
+				"ts_height": "10",
+				"ts_width": "10" 
+			}
+		],
+
+		"units_paths": [
+			{
+				"up_x": "800",
+				"up_y": "0"
+			},
+
+			{
+
+			}
+		]
+
+	}
+}

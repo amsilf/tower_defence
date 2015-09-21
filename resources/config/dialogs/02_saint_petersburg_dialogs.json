@@ -1,0 +1,10 @@
+{
+	"name": "Saint-Petersurg - dialogs",
+
+	"briefing": {
+		"trigger": "on_start",
+		"image": "resources/briefing/02_saint_petersburg_briefing.png",
+		"title": "Red Alert! Nucler strike!",
+		"text": "TO BE DONE"
+	}
+}
