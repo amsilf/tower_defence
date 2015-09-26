@@ -4,47 +4,27 @@
 --
 -----------------------------------------------------------------------------------------
 
-local mapConfigReader = require("config_reader");
 
--- classes
-
-local Unit = {};
-Unit = {
-	sprite = nil,
-	health = 100,
-	armor = 0,
-	angel = 0
-}
-
-Unit.__index = Unit;
-
-setmetatable(Unit, {
-	__call = function (cls, ...)
-		return cls.new(...);
-	end
-});
-
-function Unit.new(init)
-	local self = setmetatable({}, Unit);
-	self.value = init;
-	return self;
-end
-
--- end of classes
-
+-- global imorts
 local physics = require("physics");
-local widget = require("widget");
+
+-- local imports
+local mapConfigReader = require("config_reader");
+local game_objects = require("game_objects");
+
+local unit = game_objects["unit"];
 
 -- hide default status bar (iOS)
 display.setStatusBar( display.HiddenStatusBar );
 
 mapConfig = mapConfigReader.readMapConfig("resources/config/maps/02_saint_petersburg.json");
 
+mapParameters = mapConfig["params"];
+
 -- load tower defence background
-local backgroundImage = display.newImage("resources/backgrounds/dvorchovaya_square.png", 450, 400);
+local backgroundImage = display.newImage(mapParameters["background"], 450, 400);
 backgroundImage:toBack();
 
--- Waves description
 local unitOptions = {
 	width = 100,
 	height = 100,
@@ -218,7 +198,7 @@ local units_number = 6;
 wave = {};
 local row_number = 0;
 for i = 1, units_number do
-	wave[i] = Unit.new();
+	wave[i] = unit.new();
 
 	wave[i].sprite = display.newSprite( unitSheet, running_unit_sequence);
 

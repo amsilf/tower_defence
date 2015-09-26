@@ -1,4 +1,4 @@
------------------------------------------------------------------------------------------
+	 -----------------------------------------------------------------------------------------
 --
 -- Reading maps configuration in a following order:
 -- - map description
@@ -39,15 +39,19 @@ function MapConfigReader.readMapConfig( mapConfig )
 
 	local unitsConfiguarion = mapParameters["units"];
 	print("[INFO] Loading units configuration [ " .. unitsConfiguarion .. " ]" );
+	mapConfiguration["units_conf"] = parseJsonToTable(unitsConfiguarion);	
 
 	local towersConfiguration = mapParameters["towers"];
 	print("[INFO] Loading towers configuration [ " .. towersConfiguration .. " ]");
+	mapConfiguration["towers_conf"] = parseJsonToTable(towersConfiguration);
 
 	local wavesConfiguration = mapParameters["waves"];
 	print("[INFO] Loading waves configuration [ " .. wavesConfiguration .. " ]");
+	mapConfiguration["waves_conf"] = parseJsonToTable(wavesConfiguration);
 
 	local dialogsConfiguration = mapParameters["dialogs"];
 	print("[INFO] Loading dialogs configuration [ " .. dialogsConfiguration .. " ]");
+	mapConfiguration["dialogs_conf"] = parseJsonToTable(dialogsConfiguration);
 
 	print("[INFO] Reading of [ " .. mapConfig .. " ] completed...");
 
