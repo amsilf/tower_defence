@@ -4,13 +4,16 @@
 --
 -----------------------------------------------------------------------------------------
 
+--local composer = require("composer");
+--composer.gotoScene("scenes.main_menu", "zoomInOutFade");
 
--- global imorts
+-- global imports
 local physics = require("physics");
 
 -- local imports
 local mapConfigReader = require("config_reader");
 local game_objects = require("game_objects");
+local sprites_sequences = require("objects_sequences");
 
 local unit = game_objects["unit"];
 
@@ -33,162 +36,6 @@ local unitOptions = {
 
 local unitSheet = graphics.newImageSheet("resources/units/mariner_animation.png", unitOptions);
 
--- 360 / 16 = 22.5, 22.5 in rad = 0.393
-local running_unit_sequence = {
-	{
-		name = "90_degree_run",
-		start = 1,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-	
-	{
-		name = "67.5_degree_run",
-		start = 13,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "45_degree_run",
-		start = 25,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "22.5_degree_run",
-		start = 37,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "0_degree_run",
-		start = 49,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "337.5_degree_run",
-		start = 61,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "315_degree_run",
-		start = 73,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "292.5_degree_run",
-		start = 85,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "270_degree_run",
-		start = 97,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "247.5_degree_run",
-		start = 109,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "225_degree_run",
-		start = 121,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "202.5_degree_run",
-		start = 133,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "180_degree_run",
-		start = 145,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "157.5_degree_run",
-		start = 157,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "135_degree_run",
-		start = 169,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "112.5_degree_run",
-		start = 181,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "90_degree_run",
-		start = 1,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	}	
-}
-
 local start_x = 800;
 local start_y = 180;
 
@@ -200,7 +47,7 @@ local row_number = 0;
 for i = 1, units_number do
 	wave[i] = unit.new();
 
-	wave[i].sprite = display.newSprite( unitSheet, running_unit_sequence);
+	wave[i].sprite = display.newSprite(unitSheet, sprites_sequences["unit"]);
 
 	wave[i].sprite.x = start_x + 40 * i + 20 * row_number;
 	wave[i].sprite.y = start_y + 40 * i - 140 * row_number;
@@ -213,7 +60,6 @@ end
 
 -- end of waves description
 
-
 -- towers description
 local towerOptions = {
 	width = 100,
@@ -223,162 +69,8 @@ local towerOptions = {
 
 local towerSheet = graphics.newImageSheet("resources/towers/turret_01_renders_set.png", towerOptions);
 
-local tower_sequence = {
-	{
-		name = "90_degree_fire",
-		start = 1,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-	
-	{
-		name = "67.5_degree_fire",
-		start = 13,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
 
-	{
-		name = "45_degree_fire",
-		start = 25,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "22.5_degree_fire",
-		start = 37,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "0_degree_fire",
-		start = 49,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "337.5_degree_fire",
-		start = 61,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "315_degree_fire",
-		start = 73,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "292.5_degree_fire",
-		start = 85,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "270_degree_fire",
-		start = 97,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "247.5_degree_fire",
-		start = 109,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "225_degree_fire",
-		start = 121,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "202.5_degree_fire",
-		start = 133,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "180_degree_fire",
-		start = 145,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "157.5_degree_fire",
-		start = 157,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "135_degree_fire",
-		start = 169,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "112.5_degree_fire",
-		start = 181,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "90_degree_fire",
-		start = 1,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	}
-}
-
-local test_tower = display.newSprite(towerSheet, tower_sequence);
+local test_tower = display.newSprite(towerSheet, sprites_sequences["tower"]);
 
 test_tower.x = 270;
 test_tower.y = 300;
@@ -407,18 +99,18 @@ local function bezierPath(self, event)
 			min_dist = current_dist;
 			closest_unit = current_unit;
 
-			print("Closest unit number is [ " .. i .. " ]");
+			--print("Closest unit number is [ " .. i .. " ]");
 		end
 	end
 
-	print("cu.x = [ " .. closest_unit.x .. " ], cu.y = " .. closest_unit.y .. " ]");
+	--print("cu.x = [ " .. closest_unit.x .. " ], cu.y = " .. closest_unit.y .. " ]");
 
-	print("pure value [ " .. (math.pow(closest_unit.x, 2) / math.sqrt( math.pow(closest_unit.x, 2) + math.pow(closest_unit.y, 2) ) ) .. " ]" );
+	--print("pure value [ " .. (math.pow(closest_unit.x, 2) / math.sqrt( math.pow(closest_unit.x, 2) + math.pow(closest_unit.y, 2) ) ) .. " ]" );
 
 	-- tower animation
 	local angel_tower_unit = math.acos( math.pow(closest_unit.x, 2) / math.sqrt( math.pow(closest_unit.x, 2) + math.pow(closest_unit.y, 2) ) );
 
-	print("Angel tower - unit [ " .. angel_tower_unit .. " ]");
+	--print("Angel tower - unit [ " .. angel_tower_unit .. " ]");
 
 	local isTowerAnimationChanged = false;
 
