@@ -20,9 +20,33 @@ local unit = game_objects["unit"];
 -- hide default status bar (iOS)
 display.setStatusBar( display.HiddenStatusBar );
 
-mapConfig = mapConfigReader.readMapConfig("resources/config/maps/02_saint_petersburg.json");
+local mapConfig = mapConfigReader.readMapConfig("resources/config/maps/02_saint_petersburg.json");
 
-mapParameters = mapConfig["params"];
+local mapParameters = mapConfig["params"];
+
+-- status string
+local playerCredits = 100;
+-- FIXME: "-80" - why?
+local creditString = display.newText("Credits: " .. playerCredits, -60, 40, native.systemFont, 30);
+
+local health = 20;
+local healthString = display.newText("Health: " .. health, 100, 40, native.systemFont, 30);
+
+local wave_number = 0;
+local total_waves = 10;
+local wavesString = display.newText("Waves: " .. wave_number .. "/" .. total_waves, -54, 90, native.systemFont, 30);
+
+-- possible towers positions
+local tp_centerX = display.contentWidth * 0.5;
+local tp_centerY = display.contentHeight * 0.5;
+local possible_tp_verticles = {0, 0, -50, 20, 30, 40};
+
+local tp_object = display.newPolygon( tp_centerY, tp_centerY, possible_tp_verticles );
+tp_object.strokeWidth = 3;
+tp_object:setFillColor(0, 0, 0, 0.5);
+tp_object:setStrokeColor("black");
+
+-- end on possible towers
 
 -- load tower defence background
 local backgroundImage = display.newImage(mapParameters["background"], 450, 400);
@@ -189,71 +213,3 @@ end
 
 Runtime:addEventListener("enterFrame", bezierPath);
 
--- Main theme music
---[[
-local function mainThemeFinished( event )
-	print("Main theme fininshed");
-end
-
-local backgroundMusicStream = audio.loadStream("resources/music/battle_2.mp3");
-local backgroundMusicChannel = audio.play(backgroundMusicStream,	 
-	{channel=1, loops=-1, fadein=5000, onComplete=mainThemeFinished});
-]]--
-
--- GUI experiments
---[[
-
-local function scrollListener( event )
-    local phase = event.phase
-
-    if ( phase == "began" ) then print( "Scroll view was touched" )
-    elseif ( phase == "moved" ) then print( "Scroll view was moved" )
-    elseif ( phase == "ended" ) then print( "Scroll view was released" )
-    end
-
-    -- In the event a scroll limit is reached...
-    if ( event.limitReached ) then
-        if ( event.direction == "up" ) then print( "Reached top limit" )
-        elseif ( event.direction == "down" ) then print( "Reached bottom limit" )
-        elseif ( event.direction == "left" ) then print( "Reached left limit" )
-        elseif ( event.direction == "right" ) then print( "Reached right limit" )
-        end
-    end
-
-    return true
-end
-
-local briefingDialog = widget.newScrollView
-{
-	top = 100,
-	left = 10,
-	width = 1000,
-	height = 600,
-	scrollWidth = 600,
-    scrollHeight = 800,
-    listener = scrollListener
-}
-
-local function handleButtonEvent( event )
-    if ( "ended" == event.phase ) then
-        print( "Button was pressed and released" )
-    end
-end
-
--- Create the widget
-local brief_ok = widget.newButton
-{
-    left = 430,
-    top = 500,
-    id = "brief_ok",
-    label = "Ok",
-    onEvent = handleButtonEvent
-}
-
-local brief_text = display.newText("Brief text test", 200, 200, native.systemFont, 60);
-
-brief_text:setFillColor(0, 0, 0);
-
-briefingDialog:insert(brief_text);
-briefingDialog:insert(brief_ok);
-]]--
