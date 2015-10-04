@@ -17,6 +17,7 @@ local sprites_sequences = require("objects_sequences");
 
 local unitClass = gameObjects["unit"];
 local towerClass = gameObjects["tower"];
+local blanTowerClass = gameObjects["blank_tower"];
 
 -- hide default status bar (iOS)
 display.setStatusBar( display.HiddenStatusBar );
@@ -38,28 +39,13 @@ local wave_number = 0;
 local total_waves = 10;
 local wavesString = display.newText("Waves: " .. wave_number .. "/" .. total_waves, -54, 90, native.systemFont, 30);
 
--- possible towers positions
---[[
-local tp_centerX = display.contentWidth * 0.5;
-local tp_centerY = display.contentHeight * 0.5;
-local possible_tp_verticles = {0, 0, -50, 20, 30, 40};
 
-local tp_object = display.newPolygon( tp_centerY, tp_centerY, possible_tp_verticles );
-tp_object.strokeWidth = 3;
-tp_object:setFillColor(0, 0, 0, 0.5);
-tp_object:setStrokeColor("black");
+-- blank towers
+local testBlanTower = blanTowerClass.new();
+testBlanTower.blankTowerGroup.x = 400;
+testBlanTower.blankTowerGroup.y = 100;
 
--- event on the empty space
-function tp_object:touch( event )
-    if event.phase == "began" then
-        print( "You touched the object!" )
-        return true
-    end
-end
-
-tp_object:addEventListener( "touch", tp_object )
---]]
--- end on possible towers
+-- end of blan towers
 
 -- load tower defence background
 local backgroundImage = display.newImage(mapParameters["background"], 450, 400);
@@ -91,8 +77,8 @@ end
 
 local testTower = towerClass.new();
 
-testTower.sprite.x = 270;
-testTower.sprite.y = 300;
+testTower.towerGroup.x = 270;
+testTower.towerGroup.y = 300;
 
 -- end of towers description
 
