@@ -11,7 +11,7 @@
 local physics = require("physics");
 
 -- local imports
-local mapConfigReader = require("config_reader");
+local levelConfigReader = require("config_reader");
 local gameObjects = require("game_objects");
 local sprites_sequences = require("objects_sequences");
 
@@ -22,9 +22,9 @@ local blanTowerClass = gameObjects["blank_tower"];
 -- hide default status bar (iOS)
 display.setStatusBar( display.HiddenStatusBar );
 
-local mapConfig = mapConfigReader.readMapConfig("resources/config/maps/02_saint_petersburg.json");
+local levelConfig = levelConfigReader.readLevelConfig("resources/config/maps/02_saint_petersburg.json");
 
-local mapParameters = mapConfig["params"];
+local levelParameters = levelConfig["params"];
 
 -- status string
 local playerCredits = 100;
@@ -48,7 +48,7 @@ testBlanTower.blankTowerGroup.y = 100;
 -- end of blan towers
 
 -- load tower defence background
-local backgroundImage = display.newImage(mapParameters["background"], 450, 400);
+local backgroundImage = display.newImage(levelParameters["background"], 450, 400);
 backgroundImage:toBack();
 
 local start_x = 800;

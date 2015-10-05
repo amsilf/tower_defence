@@ -7,9 +7,9 @@
 -- - units into the waves
 --
 -----------------------------------------------------------------------------------------
-local MapConfigReader={};
+local levelConfigReader={};
 
-function parseJsonToTable( file )
+function parseJsonToTable(file)
 
 	filePath = system.pathForFile(file);
 
@@ -23,39 +23,39 @@ function parseJsonToTable( file )
     return json.decode(content);
 end
 
-function MapConfigReader.readMapConfig( mapConfig )
-	if not mapConfig then 
-		print("[ERROR] mapConfig is empty!");
+function levelConfigReader.readLevelConfig(levelConfig)
+	if not levelConfig then 
+		print("[ERROR] levelConfig is empty!");
 		return nil; 
 	end
 
-	print("[INFO] Reading [ " .. mapConfig .. " ] map...");
+	print("[INFO] Reading [ " .. levelConfig .. " ] map...");
 
-	local mapConfiguration = parseJsonToTable(mapConfig);
+	local levelConfiguration = parseJsonToTable(levelConfig);
 
-	local mapParameters = mapConfiguration["params"];
+	local levelParameters = levelConfiguration["params"];
 
 	-- load related configuration objects
 
-	local unitsConfiguarion = mapParameters["units"];
+	local unitsConfiguarion = levelParameters["units"];
 	print("[INFO] Loading units configuration [ " .. unitsConfiguarion .. " ]" );
-	mapConfiguration["units_conf"] = parseJsonToTable(unitsConfiguarion);	
+	levelConfiguration["units_conf"] = parseJsonToTable(unitsConfiguarion);	
 
-	local towersConfiguration = mapParameters["towers"];
+	local towersConfiguration = levelParameters["towers"];
 	print("[INFO] Loading towers configuration [ " .. towersConfiguration .. " ]");
-	mapConfiguration["towers_conf"] = parseJsonToTable(towersConfiguration);
+	levelConfiguration["towers_conf"] = parseJsonToTable(towersConfiguration);
 
-	local wavesConfiguration = mapParameters["waves"];
+	local wavesConfiguration = levelParameters["waves"];
 	print("[INFO] Loading waves configuration [ " .. wavesConfiguration .. " ]");
-	mapConfiguration["waves_conf"] = parseJsonToTable(wavesConfiguration);
+	levelConfiguration["waves_conf"] = parseJsonToTable(wavesConfiguration);
 
-	local dialogsConfiguration = mapParameters["dialogs"];
+	local dialogsConfiguration = levelParameters["dialogs"];
 	print("[INFO] Loading dialogs configuration [ " .. dialogsConfiguration .. " ]");
-	mapConfiguration["dialogs_conf"] = parseJsonToTable(dialogsConfiguration);
+	levelConfiguration["dialogs_conf"] = parseJsonToTable(dialogsConfiguration);
 
-	print("[INFO] Reading of [ " .. mapConfig .. " ] completed...");
+	print("[INFO] Reading of [ " .. levelConfig .. " ] completed...");
 
-	return mapConfiguration;
+	return levelConfiguration;
 end
 
-return MapConfigReader;
+return levelConfigReader;
