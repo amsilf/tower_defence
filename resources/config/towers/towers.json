@@ -1,7 +1,65 @@
 {
 	"name": "towers characteristics",
 
+	"blankTower": {
+		"type": "blank",
+
+	},
+
 	"turret": {
-		"name": "turret"
+		"type": "turret",
+		
+		"speed": "1",
+		"level": "1",
+		"range": "150",
+		"cost": "100",
+		"upgradeCost": "120",
+
+		"gui": {
+
+			"x": "100",
+			"y": "100",
+
+			"tower_sheet": "resources/towers/turret_renders_set.png",
+			"tower_sheet_width": "100",
+			"tower_sheet_height": "100",
+			"tower_sheet_numframes": "192",
+
+			"range": {
+				"circle_x": "25",
+				"circle_y": "0",
+
+				"effect": "generator.radialGradient",
+				"color1": "1, 0, 0, 1",
+				"color2": "0, 0, 0, 0",
+				"center_and_radius": "0.5, 0.5, 0.6, 0.4",
+				"aspect_ratio": "1",
+				"def_alpha": "0",
+				"visivle_alpha": "0.5",
+				"strokeWidth": "0.5"
+			},
+
+			"btnUpgrade": {
+				"width": "70",
+				"height": "70",
+				"left": "-20",
+				"top": "-140",
+				"fontSize": "25",
+				"isEnable": "false",
+				"alpha": "0",
+				"defaultFile": "resources/icons/upgrade_icon.png"
+			},
+
+			"btnSell": {
+				"width": "70",
+				"height": "70",
+				"left": "10",
+				"top": "110",
+				"isEnable": "false",
+				"alpha": "0",
+				"defaultFile": "resources/icons/sell_icon.png"
+			}
+		}
 	}
 }
+
