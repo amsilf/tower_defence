@@ -4,6 +4,67 @@
 	"blankTower": {
 		"type": "blank",
 
+		"gui": {
+			"x": "100",
+			"y": "100",
+
+			"image": "resources/towers/blank_tower.png",
+
+			"menu": {
+				"circle_x": "0",
+				"circle_y": "0",
+				"radius": "100",
+
+				"effect": "generator.radialGradient",
+				"color1": "0, 0, 1, 1",
+				"color2": "0, 0, 0, 0",
+				"center_and_radius": "0.5, 0.5, 0.6, 0.4",
+				"aspect_ratio": "1",
+				"def_alpha": "0",
+				"visivle_alpha": "0.5",
+				"strokeWidth": "0.5"
+			},
+
+			"btnBuildTurret": {
+				"width": "100",
+				"height": "100",
+				"left": "-50",
+				"top": "50",
+				"fontSize": "25",
+				"isEnable": "false",
+				"label": "T"
+			},
+
+			"btnBuildLaser": {
+				"width": "100",
+				"height": "100",
+				"left": "-150",
+				"top": "50",
+				"fontSize": "25",
+				"isEnable": "false",
+				"label": "T"
+			},
+
+			"btnBuildRocket": {
+				"width": "100",
+				"height": "100",
+				"left": "-50",
+				"top": "150",
+				"fontSize": "25",
+				"isEnable": "false",
+				"label": "T"
+			},
+
+			"btnBuildPlasma": {
+				"width": "100",
+				"height": "100",
+				"left": "50",
+				"top": "-50",
+				"fontSize": "25",
+				"isEnable": "false",
+				"label": "T"
+			}
+		}
 	},
 
 	"turret": {
