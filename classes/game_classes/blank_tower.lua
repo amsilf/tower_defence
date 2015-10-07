@@ -4,6 +4,8 @@
 --
 -----------------------------------------------------------------------------------------
 
+local widget = require("widget");
+
 local blankTowerClass = {};
 
 blankTowerClass = {
@@ -17,7 +19,7 @@ blankTowerClass = {
 	buildPlasmaButton = nil
 };
 
-local blankTower_mt = { __index = blankTower };
+local blankTower_mt = { __index = blankTowerClass };
 
 function blankTowerClass.new(params)
 	newBlankTower = {
@@ -70,6 +72,7 @@ function blankTowerClass.new(params)
 	newBlankTower.blankTowerGroup:insert(newBlankTower.buildTurretButton);
 
 	-- laser
+	local laserButtonParams = guiParams[""];
 	newBlankTower.buildLaserButton = widget.newButton({
 		width = 100,
 		height = 100,
@@ -79,6 +82,7 @@ function blankTowerClass.new(params)
 		isEnable = false,
 		label = "L"
 	});
+
 	newBlankTower.buildLaserButton.alpha = 0;
 	newBlankTower.blankTowerGroup:insert(newBlankTower.buildLaserButton);
 	
@@ -92,6 +96,7 @@ function blankTowerClass.new(params)
 		isEnable = false,
 		label = "R"
 	});
+
 	newBlankTower.buildRocketButton.alpha = 0;
 	newBlankTower.blankTowerGroup:insert(newBlankTower.buildRocketButton);
 
@@ -105,6 +110,7 @@ function blankTowerClass.new(params)
 		isEnable = false,
 		label = "P"
 	});
+
 	newBlankTower.buildPlasmaButton.alpha = 0;
 	newBlankTower.blankTowerGroup:insert(newBlankTower.buildPlasmaButton);
 
@@ -115,7 +121,7 @@ function blankTowerClass.new(params)
 	return newBlankTower;
 end
 
-local function blankTowerClass:hideMenu()
+function blankTowerClass:hideMenu()
 	self.menu.alpha = 0;
 
 	self.buildTurretButton.alpha = 0;
@@ -131,7 +137,11 @@ local function blankTowerClass:hideMenu()
 	self.buildPlasmaButton.isEnable = false;
 end
 
--- local
+function blankTowerClass:setDisplayPosition(x, y)
+	self.blankTowerGroup.x = x;
+	self.blankTowerGroup.y = y;
+end
+
 function blankTowerClass:touch(event)
 	self.menu.alpha = 1;
 
@@ -148,7 +158,6 @@ function blankTowerClass:touch(event)
 	self.buildPlasmaButton.isEnable = true;
 end
 
--- local?
 function blankTowerClass:listen()
 	local blankTower = self;
 

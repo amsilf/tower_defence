@@ -11,6 +11,8 @@
 local physics = require("physics");
 
 -- local imports
+local level = require("classes.game_classes.level");
+
 local levelConfigReader = require("config_reader");
 local gameObjects = require("game_objects");
 local sprites_sequences = require("objects_sequences");
@@ -22,6 +24,7 @@ local blanTowerClass = gameObjects["blank_tower"];
 -- hide default status bar (iOS)
 display.setStatusBar( display.HiddenStatusBar );
 
+level:readConfig("resources/config/maps/02_saint_petersburg.json");
 local levelConfig = levelConfigReader.readLevelConfig("resources/config/maps/02_saint_petersburg.json");
 
 local levelParameters = levelConfig["params"];
@@ -38,18 +41,6 @@ local healthString = display.newText("Health: " .. health, 100, 40, native.syste
 local wave_number = 0;
 local total_waves = 10;
 local wavesString = display.newText("Waves: " .. wave_number .. "/" .. total_waves, -54, 90, native.systemFont, 30);
-
-
--- blank towers
-local testBlanTower = blanTowerClass.new();
-testBlanTower.blankTowerGroup.x = 400;
-testBlanTower.blankTowerGroup.y = 100;
-
--- end of blan towers
-
--- load tower defence background
-local backgroundImage = display.newImage(levelParameters["background"], 450, 400);
-backgroundImage:toBack();
 
 local start_x = 800;
 local start_y = 180;
