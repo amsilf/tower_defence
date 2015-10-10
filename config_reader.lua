@@ -37,13 +37,17 @@ function levelConfigReader.readLevelConfig(levelConfig)
 
 	-- load related configuration objects
 
-	local unitsConfiguarion = levelParameters["units"];
+	local unitsConfiguarion = levelParameters["static_units"];
 	print("[INFO] Loading units configuration [ " .. unitsConfiguarion .. " ]" );
 	levelConfiguration["units_conf"] = parseJsonToTable(unitsConfiguarion);	
 
-	local towersConfiguration = levelParameters["towers"];
+	local towersConfiguration = levelParameters["static_towers"];
 	print("[INFO] Loading towers configuration [ " .. towersConfiguration .. " ]");
 	levelConfiguration["towers_conf"] = parseJsonToTable(towersConfiguration);
+
+	local resourcesConfiguration = levelParameters["static_resources"];
+	print("[INFO] Loading resources configuration [ " .. resourcesConfiguration .. " ]");
+	levelConfiguration["static_resources"] = parseJsonToTable(resourcesConfiguration);
 
 	local wavesConfiguration = levelParameters["waves"];
 	print("[INFO] Loading waves configuration [ " .. wavesConfiguration .. " ]");

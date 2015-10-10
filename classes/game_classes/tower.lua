@@ -62,6 +62,7 @@ function towerClass.new(params)
 	newTower.towerGroup:insert(objRange);
 
 	-- sell and upgrade buttons - images
+	local btnUpgradeParams = 
 	newTower.upgradeButton = widget.newButton({
 			width = 100,
 			height = 100,
@@ -97,6 +98,16 @@ function towerClass.new(params)
 	return newTower;
 end
 
+local function towerClass:hideMenu()
+	self.towerRange.alpha = 0.5;
+
+	self.upgradeButton.alpha = 1;
+	self.upgradeButton.isEnable = true;
+
+	self.sellButton.alpha = 1;
+	self.sellButton.isEnable = true;	
+end
+
 -- TODO make it local
 local function towerClass.initTowerSprite(type)
 	local towerOptions = {
@@ -110,6 +121,16 @@ local function towerClass.initTowerSprite(type)
 	return display.newSprite(towerSheet, sprites_sequences["tower"])
 end
 
+local function towerClass:hideMenu()
+	self.towerRange.alpha = 0;
+
+	self.upgradeButton.alpha = 0;
+	self.upgradeButton.isEnable = false;
+
+	self.sellButton.alpha = 0;
+	self.sellButton.isEnable = false;	
+end
+
 -- local?
 function towerClass:touch(event)
 	self.towerRange.alpha = 0.5;
@@ -121,7 +142,11 @@ function towerClass:touch(event)
 	self.sellButton.isEnable = true;
 end
 
--- local?
+function towerClass:setTowerPosition(x, y)
+	self.towerGroup.x = x;
+	self.towerGroup.y = y;
+end
+
 function towerClass:listen()
 	local tower = self;
 

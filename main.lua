@@ -29,19 +29,6 @@ local levelConfig = levelConfigReader.readLevelConfig("resources/config/maps/02_
 
 local levelParameters = levelConfig["params"];
 
--- status string
-local playerCredits = 100;
-
--- FIXME: "-80" - why?
-local creditString = display.newText("Credits: " .. playerCredits, -60, 40, native.systemFont, 30);
-
-local health = 20;
-local healthString = display.newText("Health: " .. health, 100, 40, native.systemFont, 30);
-
-local wave_number = 0;
-local total_waves = 10;
-local wavesString = display.newText("Waves: " .. wave_number .. "/" .. total_waves, -54, 90, native.systemFont, 30);
-
 local start_x = 800;
 local start_y = 180;
 
@@ -86,6 +73,7 @@ local function bezierPath(self, event)
 	local minDist = 10000;
 
 	-- NB: tower is a center of the coordinates system
+	--[[
 	for i, unit in ipairs(wave) do
 		local currentUnit = unit.sprite;
 
@@ -119,7 +107,7 @@ local function bezierPath(self, event)
 		isTowerAnimationChanged = false;
 		testTower:play();
 	end
-
+	]]--
 	-- end of towers
 
 	-- moving wave cycle

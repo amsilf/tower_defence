@@ -9,6 +9,8 @@ local widget = require("widget");
 local blankTowerClass = {};
 
 blankTowerClass = {
+	level = nil,
+
 	blankTowerGroup = nil,
 	menu = nil,
 	image = nil,
@@ -21,8 +23,10 @@ blankTowerClass = {
 
 local blankTower_mt = { __index = blankTowerClass };
 
-function blankTowerClass.new(params)
+function blankTowerClass.new(params, level)
 	newBlankTower = {
+		level = nil,
+
 		blankTowerGroup = nil,
 		menu = nil,
 		image = nil,
@@ -32,6 +36,8 @@ function blankTowerClass.new(params)
 		buildRocketButton = nil,
 		buildPlasmaButton = nil
 	};
+
+	newBlankTower.level = level;
 
 	local guiParams = params["gui"];
 
@@ -63,52 +69,50 @@ function blankTowerClass.new(params)
 		height = turrentButtonParams["height"],
 		left = turrentButtonParams["left"],
 		top = turrentButtonParams["top"],
-		fontSize = turrentButtonParams["fontSize"],
 		isEnable = turrentButtonParams["isEnable"],
-		label = turrentButtonParams["label"]
+		defaultFile = turrentButtonParams["image"]
 	});
 
 	newBlankTower.buildTurretButton.alpha = 0;
 	newBlankTower.blankTowerGroup:insert(newBlankTower.buildTurretButton);
 
 	-- laser
-	local laserButtonParams = guiParams[""];
+	local laserButtonParams = guiParams["btnBuildLaser"];
 	newBlankTower.buildLaserButton = widget.newButton({
-		width = 100,
-		height = 100,
-		left = -150,
-		top = -50,
-		fontSize = 25,
-		isEnable = false,
-		label = "L"
+		width = laserButtonParams["width"],
+		height = laserButtonParams["height"],
+		left = laserButtonParams["left"],
+		top = laserButtonParams["top"],
+		isEnable = laserButtonParams["isEnable"],
+		defaultFile = laserButtonParams["image"]
 	});
 
 	newBlankTower.buildLaserButton.alpha = 0;
 	newBlankTower.blankTowerGroup:insert(newBlankTower.buildLaserButton);
 	
 	-- rocket
+	local rocketButtonParams = guiParams["btnBuildRocket"];
 	newBlankTower.buildRocketButton = widget.newButton({
-		width = 100,
-		height = 100,
-		left = -50,
-		top = -150,
-		fontSize = 25,
-		isEnable = false,
-		label = "R"
+		width = rocketButtonParams["width"],
+		height = rocketButtonParams["height"],
+		left = rocketButtonParams["left"],
+		top = rocketButtonParams["top"],
+		isEnable = rocketButtonParams["isEnable"],
+		defaultFile = rocketButtonParams["image"]
 	});
 
 	newBlankTower.buildRocketButton.alpha = 0;
 	newBlankTower.blankTowerGroup:insert(newBlankTower.buildRocketButton);
 
 	-- plasma
+	local plasmaButtonParams = guiParams["btnBuildPlasma"];
 	newBlankTower.buildPlasmaButton = widget.newButton({
-		width = 100,
-		height = 100,
-		left = 50,
-		top = -50,
-		fontSize = 25,
-		isEnable = false,
-		label = "P"
+		width = plasmaButtonParams["width"],
+		height = plasmaButtonParams["height"],
+		left = plasmaButtonParams["left"],
+		top = plasmaButtonParams["top"],
+		isEnable = plasmaButtonParams["isEnable"],
+		defaultFile = plasmaButtonParams["image"]
 	});
 
 	newBlankTower.buildPlasmaButton.alpha = 0;
@@ -142,20 +146,87 @@ function blankTowerClass:setDisplayPosition(x, y)
 	self.blankTowerGroup.y = y;
 end
 
+function blankTowerClass:setId(id)
+	self.id = id;
+end
+
 function blankTowerClass:touch(event)
+	-- check resources
+
 	self.menu.alpha = 1;
 
-	self.buildTurretButton.alpha = 1;
-	self.buildTurretButton.isEnable = true;
+	if ( self.level:checkResourcesBuild("turret") == true ) then
+		self.buildTurretButton.alpha = 1;
+		self.buildTurretButton.isEnable = true;
+	else
+		self.buildTurretButton.alpha = 0.5;
+		self.buildTurretButton.isEnable = false;
+	end
 
-	self.buildRocketButton.alpha = 1;
-	self.buildRocketButton.isEnable = true;
+	if ( self.level:checkResourcesBuild("rocket") == true ) then
+		self.buildRocketButton.alpha = 1;
+		self.buildRocketButton.isEnable = true;
+	else
+		self.buildRocketButton.alpha = 0.5;
+		self.buildRocketButton.isEnable = false;		
+	end
 
-	self.buildLaserButton.alpha = 1;
-	self.buildLaserButton.isEnable = true;
+	if ( self.level:checkResourcesBuild("laser") == true ) then
+		self.buildLaserButton.alpha = 1;
+		self.buildLaserButton.isEnable = true;
+	else
+		self.buildLaserButton.alpha = 0.5;
+		self.buildLaserButton.isEnable = false;		
+	end
 
-	self.buildPlasmaButton.alpha = 1;
-	self.buildPlasmaButton.isEnable = true;
+	if ( self.level:checkResourcesBuild("rocket") == true ) then
+		self.buildPlasmaButton.alpha = 1;
+		self.buildPlasmaButton.isEnable = true;
+	else
+		self.buildPlasmaButton.alpha = 0.5;
+		self.buildPlasmaButton.isEnable = false;
+	end
+end
+
+function blankTowerClass:buildTowerTouch(self, event, type)
+	self.level:buildTower(self, event, type);
+end
+
+function blankTowerClass:destroyBlankTower()
+	if (self.image ~= nil) then 
+		self.image:removeSelf(); 
+		self.image = nil;
+	end
+
+	if (self.menu ~= nil) then
+		self.menu:removeSelf();
+		self.menu = nil;
+	end	
+
+	if (self.buildTurretButton ~= nil) then
+		self.buildTurretButton:removeSelf();
+		self.buildTurretButton = nil;
+	end
+
+	if (self.buildLaserButton ~= nil) then
+		self.buildLaserButton:removeSelf();
+		self.buildLaserButton = nil;
+	end
+
+	if (self.buildRocketButton ~= nil) then
+		self.buildRocketButton:removeSelf();
+		self.buildRocketButton = nil;
+	end
+
+	if (self.buildPlasmaButton ~= nil) then
+		self.buildPlasmaButton:removeSelf();
+		self.buildPlasmaButton = nil;
+	end
+
+	if (self.blankTowerGroup ~= nil) then
+		self.blankTowerGroup:removeSelf();
+		self.blankTowerGroup = nil;
+	end
 end
 
 function blankTowerClass:listen()
@@ -165,7 +236,28 @@ function blankTowerClass:listen()
 		blankTower:touch(event)
 	end
 
-	self.image:addEventListener("touch");
+	self.buildTurretButton.touch = function (self, event)
+		blankTower:buildTowerTouch(blankTower, event, "turret");
+	end
+
+	self.buildLaserButton.touch = function (self, event)
+		blankTower:buildTowerTouch(blankTower, event, "laser");
+	end
+
+	self.buildRocketButton.touch = function (self, event)
+		blankTower:buildTowerTouch(blankTower, event, "rocket");
+	end
+
+	self.buildPlasmaButton.touch = function (self, event)
+		blankTower:buildTowerTouch(blankTower, event, "plasma");
+	end
+
+	self.buildTurretButton:addEventListener("touch", self.buildTurretButton);
+	self.buildLaserButton:addEventListener("touch", self.buildLaserButton);
+	self.buildRocketButton:addEventListener("touch", self.buildRocketButton);
+	self.buildPlasmaButton:addEventListener("touch", self.buildPlasmaButton);
+
+	self.image:addEventListener("touch", self.image);
 end
 
 return blankTowerClass;
