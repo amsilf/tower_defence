@@ -3,11 +3,18 @@
 
 	"params": {
 		"background": "resources/backgrounds/dvorchovaya_square.png",
-		
+
 		"waves": "resources/config/waves/02_saint_petersburg_waves.json",
-		"units": "resources/config/units/units.json",
-		"towers": "resources/config/towers/towers.json",
 		"dialogs": "resources/config/dialogs/02_saint_petersburg_dialogs.json",
+
+		"static_units": "resources/config/units/units.json",
+		"static_towers": "resources/config/towers/towers.json",
+		"static_resources": "resources/config/static_resources/resources.json",
+
+		"level_resources": {
+			"credits": 20,
+			"health": 20
+		},
 
 		"start_points": [
 			{
@@ -17,6 +24,7 @@
 				"end_x": "200",
 				"end_y": "200"
 			},
+
 			{
 				"waves" : "sp_2, sp_4, sp_6, sp_8",
 				"start_x": "100",
@@ -26,15 +34,21 @@
 			}
 		],
 
+		"towers": [
+			{
+
+			}
+		],
+
 		"blanks_towers": [
 			{
-				"bt_x": "400",
-				"bt_y": "100",
+				"bt_x": 400,
+				"bt_y": 100,
 			},
 
 			{
-				"bt_x": "700",
-				"bt_y": "350"
+				"bt_x": 700,
+				"bt_y": 350
 			}
 		],
 
