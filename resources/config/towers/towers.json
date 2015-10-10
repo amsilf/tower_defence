@@ -26,43 +26,39 @@
 			},
 
 			"btnBuildTurret": {
-				"width": 100,
-				"height": 100,
-				"left": -50,
-				"top": 50,
-				"fontSize": 25,
+				"width": 70,
+				"height": 70,
+				"left": -25,
+				"top": 70,
 				"isEnable": "false",
-				"label": "T"
+				"image": "resources/icons/turret_icon.png"
 			},
 
 			"btnBuildLaser": {
-				"width": 100,
-				"height": 100,
-				"left": -150,
-				"top": 50,
-				"fontSize": 25,
+				"width": 50,
+				"height": 50,
+				"left": -125,
+				"top": -25,
 				"isEnable": "false",
-				"label": "T"
+				"image": "resources/icons/laser_icon.png"
 			},
 
 			"btnBuildRocket": {
-				"width": 100,
-				"height": 100,
-				"left": -50,
-				"top": 150,
-				"fontSize": 25,
+				"width": 50,
+				"height": 50,
+				"left": -25,
+				"top": -120,
 				"isEnable": "false",
-				"label": "T"
+				"image": "resources/icons/rocket_icon.png"
 			},
 
 			"btnBuildPlasma": {
-				"width": 100,
-				"height": 100,
-				"left": 50,
-				"top": -55,
-				"fontSize": 25,
+				"width": 50,
+				"height": 50,
+				"left": 75,
+				"top": -25,
 				"isEnable": "false",
-				"label": "T"
+				"image": "resources/icons/plasma_icon.png"
 			}
 		}
 	},
