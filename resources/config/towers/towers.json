@@ -16,9 +16,9 @@
 				"radius": 100,
 
 				"effect": "generator.radialGradient",
-				"color1": "0, 0, 1, 1",
-				"color2": "0, 0, 0, 0",
-				"center_and_radius": "0.5, 0.5, 0.6, 0.4",
+				"color1": [0, 0, 1, 1],
+				"color2": [0, 0, 0, 0],
+				"center_and_radius": [0.5, 0.5, 0.6, 0.4],
 				"aspect_ratio": 1,
 				"def_alpha": 0,
 				"visivle_alpha": 0.5,
@@ -87,9 +87,9 @@
 				"circle_y": 0,
 
 				"effect": "generator.radialGradient",
-				"color1": "1, 0, 0, 1",
-				"color2": "0, 0, 0, 0",
-				"center_and_radius": "0.5, 0.5, 0.6, 0.4",
+				"color1": [1, 0, 0, 1],
+				"color2": [0, 0, 0, 0],
+				"center_and_radius": [0.5, 0.5, 0.6, 0.4],
 				"aspect_ratio": 1,
 				"def_alpha": 0,
 				"visivle_alpha": 0.5,
@@ -97,12 +97,12 @@
 			},
 
 			"btnUpgrade": {
-				"width": 70,
-				"height": 70,
+				"width": 50,
+				"height": 50,
 				"left": -20,
 				"top": -140,
 				"fontSize": 25,
-				"isEnable": "false",
+				"isEnable": false,
 				"alpha": 0,
 				"defaultFile": "resources/icons/upgrade_icon.png"
 			},
@@ -112,10 +112,22 @@
 				"height": 70,
 				"left": 10,
 				"top": 110,
-				"isEnable": "false",
+				"isEnable": false,
 				"alpha": 0,
 				"defaultFile": "resources/icons/sell_icon.png"
 			}
+		},
+
+		"rocket": {
+
+		},
+
+		"laser": {
+
+		},
+
+		"plasma": {
+			
 		}
 	}
 }

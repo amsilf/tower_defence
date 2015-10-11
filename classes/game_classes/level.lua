@@ -9,11 +9,7 @@ local configReader = require("config_reader");
 -- game classes
 local blankTowerClass = require("classes.game_classes.blank_tower");
 local resourcesClass = require("classes.game_classes.resources");
-
--- for test
-local gameObjects = require("game_objects");
-
-local towerClass = game_objects["tower"];
+local towerClass = require("classes.game_classes.tower");
 
 local levelClass = {};
 
@@ -40,13 +36,13 @@ function levelClass:readConfig(configPath)
 
 	-- init resources
 	-- FIMME - 10 must be real waves number
-	self:initResources( levelParams["level_resources"], self.levelConfig["static_resources"]["resources"], 10 );
+	self:initResources( levelParams["level_resources"], self.levelConfig["static_resources_conf"]["resources"], 10 );
 
 	-- init blank towers
-	self:initBlankTowes( levelParams["blanks_towers"], self.levelConfig["towers_conf"] );
+	self:initBlankTowes( levelParams["blanks_towers"], self.levelConfig["static_towers_conf"] );
 
 	-- init towers
-	self:initTowers( levelParams["towers"], self.levelConfig["static_towers"] );
+	self:initTowers( levelParams["towers"], self.levelConfig["static_towers_conf"] );
 
 	-- init waves
 	self:initWaves(self.levelConfig["waves"]);
@@ -69,21 +65,29 @@ function levelClass:initResources(levelResources, staticResources, wavesNumber)
 end
 
 function levelClass:initBlankTowes(blankTowersConfig, staticTowersConfig)
-	local commonBlankTowerConfig = staticTowersConfig["blank_tower"];
+	local staticBlankTowerConfig = staticTowersConfig["blank_tower"];
 
-	local tmpBlankTower;
+	local tmpBlankTower = nil;
 	for i, blankTower in ipairs(blankTowersConfig) do
-		tmpBlankTower = blankTowerClass.new( commonBlankTowerConfig, self );
+		tmpBlankTower = blankTowerClass.new( staticBlankTowerConfig, self );
 
-		tmpBlankTower:setDisplayPosition(blankTower["bt_x"], blankTower["bt_y"]);
-		tmpBlankTower:setId(blankTower["id"]);
+		tmpBlankTower:setDisplayPosition( blankTower["x"], blankTower["y"] );
 
 		table.insert(self.blankTowers, tmpBlankTower);
 	end
 end
 
 function levelClass:initTowers(towersConfig, staticTowersConfig)
+	local staticTowersConfig = staticTowersConfig;
 
+	local tmpTower = nil;
+	for i, tower in ipairs(towersConfig) do
+		tmpTower = towerClass.new( staticTowersConfig[ tower["type"] ], self );
+
+		tmpTower:setTowerPosition( tower["x"], tower["y"] );
+
+		table.insert(self.towers, tmpTower);
+	end
 end
 
 function levelClass:initWaves(wavesConfig)
@@ -127,11 +131,10 @@ function levelClass:buildTower(blankTower, event, type)
 end
 
 function levelClass:buildNewTower(type, x, y)
-	local towerParams = self.levelConfig["towers_conf"][type];
-	local newTower = towerClass.new();
+	local static_towers_conf = self.levelConfig["static_towers_conf"][type];
+	local newTower = towerClass.new(static_towers_conf, self);
 
-	newTower.towerGroup.x = x;
-	newTower.towerGroup.y = y;
+	newTower:setTowerPosition(x, y);
 
 	table.insert(self.towers, newTower);
 end

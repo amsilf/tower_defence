@@ -18,8 +18,6 @@ local gameObjects = require("game_objects");
 local sprites_sequences = require("objects_sequences");
 
 local unitClass = gameObjects["unit"];
-local towerClass = gameObjects["tower"];
-local blanTowerClass = gameObjects["blank_tower"];
 
 -- hide default status bar (iOS)
 display.setStatusBar( display.HiddenStatusBar );
@@ -50,15 +48,6 @@ for i = 1, units_number do
 end
 
 -- end of waves description
-
--- towers description
-
-local testTower = towerClass.new();
-
-testTower.towerGroup.x = 270;
-testTower.towerGroup.y = 300;
-
--- end of towers description
 
 -- timing parameters
 t=0.1

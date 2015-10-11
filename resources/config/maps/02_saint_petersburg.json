@@ -18,49 +18,51 @@
 
 		"start_points": [
 			{
-				"waves": "sp_1, sp_3, sp_5, sp_7",
-				"start_x": "100",
-				"start_y": "100",
-				"end_x": "200",
-				"end_y": "200"
+				"waves": ["sp_1", "sp_3", "sp_5", "sp_7"],
+				"start_x": 100,
+				"start_y": 100,
+				"end_x": 200,
+				"end_y": 200
 			},
 
 			{
-				"waves" : "sp_2, sp_4, sp_6, sp_8",
-				"start_x": "100",
-				"start_y": "100",
-				"end_x": "200",
-				"end_y": "200"
+				"waves" : ["sp_2", "sp_4", "sp_6", "sp_8"],
+				"start_x": 100,
+				"start_y": 100,
+				"end_x": 200,
+				"end_y": 200
 			}
 		],
 
 		"towers": [
 			{
-
+				"type": "turret",
+				"x": 270,
+				"y": 300
 			}
 		],
 
 		"blanks_towers": [
 			{
-				"bt_x": 400,
-				"bt_y": 100,
+				"x": 400,
+				"y": 100,
 			},
 
 			{
-				"bt_x": 700,
-				"bt_y": 350
+				"x": 700,
+				"y": 350
 			}
 		],
 
 		"units_paths": [
 			{
-				"up_x": "800",
-				"up_y": "0"
+				"up_x": 800,
+				"up_y": 0
 			},
 
 			{
-				"up_x": "800",
-				"up_y": "10"
+				"up_x": 800,
+				"up_y": 10
 			}
 		]
 
