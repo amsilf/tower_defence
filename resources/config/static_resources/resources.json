@@ -10,25 +10,25 @@
 		"turret": {
 			"price": 100,
 			"sell": 50,
-			"upgrade": "120, 150, 200, 300"
+			"upgrade": [120, 150, 200, 300]
 		},
 
 		"rocket": {
 			"price": 120,
 			"sell": 50,
-			"upgrade": "120, 150, 200, 300"
+			"upgrade": [120, 150, 200, 300]
 		},
 
 		"laser": {
 			"price": 150,
 			"sell": 50,
-			"upgrade": "120, 150, 200, 300"
+			"upgrade": [120, 150, 200, 300]
 		},
 
 		"plasma": {
 			"price": 200,
 			"sell": 50,
-			"upgrade": "120, 150, 200, 300"
+			"upgrade": [120, 150, 200, 300]
 		},
 
 		"mariner": {

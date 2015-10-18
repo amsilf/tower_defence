@@ -274,9 +274,8 @@ function blankTower.new()
 		height = 100,
 		left = -50,
 		top = 50,
-		fontSize = 25,
 		isEnable = false,
-		label = "T"
+		defaultFile = "resources/icons/turret_icon.png"
 	});
 
 	newBlankTower.buildTurretButton.alpha = 0;
@@ -357,10 +356,9 @@ function blankTower:listen()
 end
 -- enf od blank space for towers
 
--- game field
+-- resources area
 
-
--- end of game field
+-- end of resources area
 
 game_objects["unit"] = unit;
 game_objects["wave"] = wave;

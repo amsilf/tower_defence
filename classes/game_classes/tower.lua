@@ -6,6 +6,8 @@
 
 local widget = require("widget");
 
+local sprites_sequences = require("objects_sequences");
+
 local towerClass = {};
 
 towerClass = {
@@ -45,7 +47,7 @@ function towerClass.new(params, level)
 
 	newTower.level = level;
 
-	newTower.sprite = initTowerSprite(params);
+	newTower.sprite = towerClass.initTowerSprite(params);
 	newTower.towerGroup = display.newGroup();
 
 	newTower.towerGroup:insert(newTower.sprite);
@@ -160,6 +162,50 @@ function towerClass:listen()
 	end
 
 	self.sprite:addEventListener("touch");
+end
+
+function towerClass:calculateRotation(tick)
+	--[[
+	-- choose closest unit
+	local closestUnit = wave[1].sprite;
+	-- 10000 - for test, must be max double
+	local minDist = 10000;
+
+	-- NB: tower is a center of the coordinates system
+	for i, unit in ipairs(wave) do
+		local currentUnit = unit.sprite;
+
+		local currentDist = math.sqrt( currentUnit.y * currentUnit.y + currentUnit.x * currentUnit.x );
+
+		if ( currentDist < minDist ) then
+			minDist = currentDist;
+			closestUnit = currentUnit;
+
+			--print("Closest unit number is [ " .. i .. " ]");
+		end
+	end
+
+	-- tower animation
+	local angelTowerUnit = math.acos( math.pow(closestUnit.x, 2) / math.sqrt( math.pow(closestUnit.x, 2) + math.pow(closestUnit.y, 2) ) );
+
+	local isTowerAnimationChanged = false;
+
+	local basicRad = 0.393;
+
+	for i = 0, 15 do
+		isAnimationChanged = true;
+		if (angelTowerUnit > (basicRad * i) and angelTowerUnit < (basicRad * (i + 1)) ) then
+			-- 22.5 is a basic rad in degrees
+			local movementType = (i * 22.5) .. "_degree_fire";
+			testTower.sprite:setSequence( movementType );
+		end
+	end
+
+	if (isTowerAnimationChanged == true) then
+		isTowerAnimationChanged = false;
+		testTower:play();
+	end
+	]]--
 end
 
 return towerClass;

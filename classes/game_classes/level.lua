@@ -10,6 +10,7 @@ local configReader = require("config_reader");
 local blankTowerClass = require("classes.game_classes.blank_tower");
 local resourcesClass = require("classes.game_classes.resources");
 local towerClass = require("classes.game_classes.tower");
+local waveClass = require("classes.game_classes.wave");
 
 local levelClass = {};
 
@@ -19,6 +20,8 @@ levelClass = {
 	waves = {},
 	resources = {},
 	dialogs = {},
+
+	time = 0;
 
 	backgroundImage = {},
 	levelConfig = {}
@@ -45,7 +48,7 @@ function levelClass:readConfig(configPath)
 	self:initTowers( levelParams["towers"], self.levelConfig["static_towers_conf"] );
 
 	-- init waves
-	self:initWaves(self.levelConfig["waves"]);
+	self:initWaves( self.levelConfig["waves_conf"]["waves"], self.levelConfig["static_units_conf"], levelParams["paths"] );
 
 	-- global listeners initialization
 	self:listen();
@@ -69,7 +72,7 @@ function levelClass:initBlankTowes(blankTowersConfig, staticTowersConfig)
 
 	local tmpBlankTower = nil;
 	for i, blankTower in ipairs(blankTowersConfig) do
-		tmpBlankTower = blankTowerClass.new( staticBlankTowerConfig, self );
+		tmpBlankTower = blankTowerClass.new( staticBlankTowerConfig, self);
 
 		tmpBlankTower:setDisplayPosition( blankTower["x"], blankTower["y"] );
 
@@ -81,7 +84,7 @@ function levelClass:initTowers(towersConfig, staticTowersConfig)
 	local staticTowersConfig = staticTowersConfig;
 
 	local tmpTower = nil;
-	for i, tower in ipairs(towersConfig) do
+	for i, tower in pairs(towersConfig) do
 		tmpTower = towerClass.new( staticTowersConfig[ tower["type"] ], self );
 
 		tmpTower:setTowerPosition( tower["x"], tower["y"] );
@@ -90,7 +93,17 @@ function levelClass:initTowers(towersConfig, staticTowersConfig)
 	end
 end
 
-function levelClass:initWaves(wavesConfig)
+function levelClass:initWaves(wavesConfig, unitsConfig, levelPaths)
+	local tmpWave = nil;
+
+	for i, currWaveCfg in pairs(wavesConfig) do
+		currWaveCfg["static_units"] = unitsConfig;
+		currWaveCfg["levelPaths"] = levelPaths;
+
+		tmpWave = waveClass.new(currWaveCfg);
+
+		table.insert(self.waves, tmpWave);
+	end
 end
 
 -- behaviour
@@ -100,6 +113,24 @@ end
 
 function levelClass:touch(event)
 	
+end
+
+function levelClass:checkWavesQueue(tick)
+
+end
+
+-- the name must be timer
+-- https://docs.coronalabs.com/api/library/timer/performWithDelay.html
+function levelClass:onTick()
+	self.time = self.time + 0.01;
+
+	self:objectsMovments();
+
+	-- TODO: thinks about proper timing implementation
+	-- bezier constant
+	if (self.time > 1) then
+		self.time = 0;
+	end
 end
 
 function levelClass:listen()
@@ -137,6 +168,21 @@ function levelClass:buildNewTower(type, x, y)
 	newTower:setTowerPosition(x, y);
 
 	table.insert(self.towers, newTower);
+end
+
+function levelClass:objectsMovments()
+	-- waves movements
+	for i, currWave in ipairs(self.waves) do
+		currWave:calculateWaveMovement(self.time, path);
+	end
+
+	-- towers rotation
+	for i, currTower in ipairs(self.towers) do
+		currTower:calculateRotation(self.time);
+	end
+
+	-- shots
+
 end
 
 return levelClass;

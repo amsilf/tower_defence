@@ -324,3 +324,5 @@ local tower_sequence = {
 sprites_sequences["unit"] = running_unit_sequence;
 sprites_sequences["tower"] = tower_sequence;
 
+return sprites_sequences;
+

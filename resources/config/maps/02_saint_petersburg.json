@@ -16,23 +16,47 @@
 			"health": 20
 		},
 
-		"start_points": [
-			{
-				"waves": ["sp_1", "sp_3", "sp_5", "sp_7"],
-				"start_x": 100,
-				"start_y": 100,
-				"end_x": 200,
-				"end_y": 200
+		"paths": {
+			"norts-east-west": {
+				"start_end": {
+					"start_x": 800,
+					"start_y": 100,
+
+					"end_x": 500,
+					"end_y": 150
+				},
+
+				"points": [
+					{
+						"x": 100,
+						"y": 100
+					}
+				]
 			},
 
-			{
-				"waves" : ["sp_2", "sp_4", "sp_6", "sp_8"],
-				"start_x": 100,
-				"start_y": 100,
-				"end_x": 200,
-				"end_y": 200
+			"south-west": {
+				"start_end": {
+					"start_x": 100,
+					"start_y": 800,
+
+					"end_x": 80,
+					"end_y": 150
+				},
+
+				"points": [
+					{
+						"x": 100,
+						"y": 200
+					},
+
+					{
+						"x": 150,
+						"y": 400
+					}
+
+				]
 			}
-		],
+		},
 
 		"towers": [
 			{
@@ -53,18 +77,6 @@
 				"y": 350
 			}
 		],
-
-		"units_paths": [
-			{
-				"up_x": 800,
-				"up_y": 0
-			},
-
-			{
-				"up_x": 800,
-				"up_y": 10
-			}
-		]
 
 	}
 }
