@@ -18,14 +18,12 @@ levelClass = {
 	towers = {},
 	blankTowers = {},
 	waves = {},
-	resources = {},
 	dialogs = {},
 
 	time = 0;
 
 	backgroundImage = {},
 	levelConfig = {}
-	
 };
 
 -- entry point
@@ -58,6 +56,15 @@ end
 function levelClass:initMainDisplay(imagePath)
 	self.backgroundImage = display.newImage(imagePath, 450, 400);
 	self.backgroundImage:toBack();
+
+	-- BEGIN - DEBUG ONLY
+	local function onObjectTouch( event )
+		print("x = [ " .. event.x .. " ], y = [ " .. event.y .. " ]");
+	end
+
+	self.backgroundImage:addEventListener("touch", onObjectTouch);
+
+	-- END - DEBUG ONLY
 end
 
 function levelClass:initResources(levelResources, staticResources, wavesNumber)
@@ -107,20 +114,32 @@ function levelClass:initWaves(wavesConfig, unitsConfig, levelPaths)
 end
 
 -- behaviour
-function levelClass:resetFieldElements()
-
-end
-
 function levelClass:touch(event)
-	
+	for i, currBlankTower in pairs(levelClass.blankTowers) do
+		currBlankTower:hideMenu();
+	end
+
+	for i, currTower in pairs(levelClass.towers) do
+		currTower:hideMenu();
+	end
+
+	return true;
 end
 
 function levelClass:checkWavesQueue(tick)
 
 end
 
--- the name must be timer
--- https://docs.coronalabs.com/api/library/timer/performWithDelay.html
+function levelClass:dicreaseHealth()
+	self.resources.healt = self.resources.health - 1;
+
+	if ( self.resources.health == 0 ) then
+		print("... GAME OVER ...");
+	end
+
+	self.resources:updateHealthLabel();
+end
+
 function levelClass:onTick()
 	self.time = self.time + 0.01;
 
@@ -136,8 +155,8 @@ end
 function levelClass:listen()
 	local gameField = self;
 
-	self.backgroundImage.touch = function (self, event) 
-		gameField.touch(event);
+	self.backgroundImage.touch = function (self, event)
+		gameField.touch(self, event);
 	end
 
 	self.backgroundImage:addEventListener("touch");
@@ -145,6 +164,10 @@ end
 
 function levelClass:checkResourcesBuild(type)
 	return resourcesClass:checkResourcesBuild(type);
+end
+
+function levelClass:checkResourcesUpgrade(type, level)
+	return resourcesClass:checkResourcesForUpgrade(type, level);
 end
 
 function levelClass:buildTower(blankTower, event, type)
@@ -164,6 +187,8 @@ end
 function levelClass:buildNewTower(type, x, y)
 	local static_towers_conf = self.levelConfig["static_towers_conf"][type];
 	local newTower = towerClass.new(static_towers_conf, self);
+
+	resourcesClass:buildTower(type);
 
 	newTower:setTowerPosition(x, y);
 

@@ -12,25 +12,93 @@
 		"static_resources": "resources/config/static_resources/resources.json",
 
 		"level_resources": {
-			"credits": 20,
+			"credits": 120,
 			"health": 20
 		},
 
 		"paths": {
 			"norts-east-west": {
-				"start_end": {
-					"start_x": 800,
-					"start_y": 100,
+				"start_end_points": {
+					"start_x": 1140,
+					"start_y": 40,
 
-					"end_x": 500,
-					"end_y": 150
+					"end_x": -105,
+					"end_y": 60
+				},
+
+				"end_line": {
+					"start_x": 1,
+					"start_y": 2,
+					"end_x": 4,
+					"end_y": 5
 				},
 
 				"points": [
 					{
-						"x": 100,
-						"y": 100
-					}
+						"x": 1090,
+						"y": 77
+					},
+
+					{
+						"x": 1022,
+						"y": 122
+					},
+
+					{
+						"x": 943,
+						"y": 167
+					},
+
+					{
+						"x": 879,
+						"y": 198
+					},
+
+					{
+						"x": 797,
+						"y": 215
+					},
+
+					{
+						"x": 715,
+						"y": 219
+					},
+
+					{
+						"x": 603,
+						"y": 217
+					},
+
+					{
+						"x": 484,
+						"y": 217
+					},
+
+					{
+						"x": 400,
+						"y": 204
+					},
+
+					{
+						"x": 330,
+						"y": 194
+					},
+
+					{
+						"x": 242,
+						"y": 194
+					},
+
+					{
+						"x": 156,
+						"y": 184
+					},
+
+					{
+						"x": 91,
+						"y": 174
+					},
+
 				]
 			},
 

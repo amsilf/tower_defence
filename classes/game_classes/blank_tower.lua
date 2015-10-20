@@ -37,6 +37,8 @@ function blankTowerClass.new(params, level)
 		buildPlasmaButton = nil
 	};
 
+	setmetatable(newBlankTower, blankTower_mt);
+
 	newBlankTower.level = level;
 
 	local guiParams = params["gui"];
@@ -70,7 +72,7 @@ function blankTowerClass.new(params, level)
 		left = turrentButtonParams["left"],
 		top = turrentButtonParams["top"],
 		isEnable = turrentButtonParams["isEnable"],
-		defaultFile = turrentButtonParams["image"]
+		defaultFile = turrentButtonParams["image"],
 	});
 
 	newBlankTower.buildTurretButton.alpha = 0;
@@ -126,6 +128,11 @@ function blankTowerClass.new(params, level)
 end
 
 function blankTowerClass:hideMenu()
+	-- FIXME: objects must be properly deleted
+	if (self.menu == nil) then
+		return
+	end
+
 	self.menu.alpha = 0;
 
 	self.buildTurretButton.alpha = 0;
@@ -144,10 +151,6 @@ end
 function blankTowerClass:setDisplayPosition(x, y)
 	self.blankTowerGroup.x = x;
 	self.blankTowerGroup.y = y;
-end
-
-function blankTowerClass:setId(id)
-	self.id = id;
 end
 
 function blankTowerClass:touch(event)
@@ -186,10 +189,8 @@ function blankTowerClass:touch(event)
 		self.buildPlasmaButton.alpha = 0.5;
 		self.buildPlasmaButton.isEnable = false;
 	end
-end
 
-function blankTowerClass:buildTowerTouch(self, event, type)
-	self.level:buildTower(self, event, type);
+	return true;
 end
 
 function blankTowerClass:destroyBlankTower()
@@ -229,27 +230,49 @@ function blankTowerClass:destroyBlankTower()
 	end
 end
 
+function blankTowerClass:buildTowerTouch(self, event, type)
+	self.level:buildTower(self, event, type);
+end
+
 function blankTowerClass:listen()
 	local blankTower = self;
 
 	self.image.touch = function (self, event)
 		blankTower:touch(event)
+
+		return true;
 	end
 
 	self.buildTurretButton.touch = function (self, event)
-		blankTower:buildTowerTouch(blankTower, event, "turret");
+		if (self.isEnable == true) then
+			blankTower:buildTowerTouch(blankTower, event, "turret");
+		end
+
+		return true;
 	end
 
 	self.buildLaserButton.touch = function (self, event)
-		blankTower:buildTowerTouch(blankTower, event, "laser");
+		if (self.isEnable == true) then
+			blankTower:buildTowerTouch(blankTower, event, "laser");
+		end
+
+		return true;
 	end
 
 	self.buildRocketButton.touch = function (self, event)
-		blankTower:buildTowerTouch(blankTower, event, "rocket");
+		if (self.isEnable == true) then
+			blankTower:buildTowerTouch(blankTower, event, "rocket");
+		end
+
+		return true;
 	end
 
 	self.buildPlasmaButton.touch = function (self, event)
-		blankTower:buildTowerTouch(blankTower, event, "plasma");
+		if (self.isEnable == true) then
+			blankTower:buildTowerTouch(blankTower, event, "plasma");
+		end
+		
+		return true;
 	end
 
 	self.buildTurretButton:addEventListener("touch", self.buildTurretButton);

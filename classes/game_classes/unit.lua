@@ -12,7 +12,13 @@ unitClass = {
 	health = 100,
 	speed = 1,
 	armor = 0,
-	angel = 0
+	
+	-- path related properties
+	angel = 0,
+	shift_x = 0,
+	shift_y = 0,
+	points_x = nil,
+	points_y = nil
 }
 
 local unitClass_mt = { __index = unitClass }
@@ -26,7 +32,13 @@ function unitClass.new()
 		health = 100,
 		speed = 1,
 		armor = 0,
-		angel = 1
+		
+		-- path related properties
+		angel = 0,
+		shift_x = 0,
+		shift_y = 0,
+		points_x = {},
+		points_y = {}
 	};
 
 	-- FIXME revise calls and pass parameters
@@ -63,52 +75,75 @@ function initUnitSprite(type)
 end
 
 function unitClass:setPosition(x, y)
-	print("x = [ " .. x .. " ], y = [ " .. y .. " ]" );
 	self.unitGroup.x = x;
 	self.unitGroup.y = y;
 end
 
-function unitClass:calculateUnitPosition(tick, path)
-	local unitAngel = self.angel;
-	local x1 = self.unitGroup.x;
-	local y1 = self.unitGroup.y;
+function unitClass:setShift(x, y)
+	self.shift_x = x;
+	self.shift_y = y;
+end
 
-	-- 0.393 - rotation angel in rad, 22.5 degrees
-	local basicRad = 0.393;
-	local basicAngel = 22.5;
+function unitClass:destroyUnit()
+
+	if (self.sprite ~= nil) then
+		self.sprite:removeSelf();
+		self.sprite = nil;
+	end
+
+	if (self.healthBar ~= nil) then
+		self.healthBar:removeSelf();
+		self.healthBar = nil;
+	end
+
+	if (self.unitGroup ~= nil) then
+		self.unitGroup:removeSelf();
+		self.unitGroup = nil;
+	end	
+
+end
+
+function unitClass:calculateUnitPosition(tick, path)
 
 	-- TODO: could be cached
 	-- creating points array
 	local pointsX = {};
 	local pointsY = {}; 
-	table.insert(pointsX, path["start_end"]["start_x"]);
-	table.insert(pointsY, path["start_end"]["start_y"]);
+	table.insert(pointsX, path["start_end_points"]["start_x"]);
+	table.insert(pointsY, path["start_end_points"]["start_y"]);
 
 	for i, currPoint in pairs(path["points"]) do
 		table.insert(pointsX, currPoint["x"]);
 		table.insert(pointsY, currPoint["y"]);
 	end
 
-	table.insert(pointsX, path["start_end"]["end_x"]);
-	table.insert(pointsY, path["start_end"]["end_y"]);
+	table.insert(pointsX, path["start_end_points"]["end_x"]);
+	table.insert(pointsY, path["start_end_points"]["end_y"]);
 
-	-- + 40 * i + 20 * rowNumber - using only start position
-	-- local bezierX = (1 - tick * tick) * start_x + 2 * tick * (1 - tick) * 500 + tick * tick * 100;
 	local bezierX = unitClass.calculateBizerApproximation(tick, pointsX);
-
-	-- + 40 * i - 140 * rowNumber
-	-- local bezierY = (1 - tick * tick) * start_y + 2 * tick * (1 - tick) * 150 + tick * tick * 100;
 	local bezierY = unitClass.calculateBizerApproximation(tick, pointsY);
 
-	self:setPosition(bezierX, bezierY);
+	local newUnitPosX = bezierX + self.shift_x;
+	local newUnitPosY = bezierY + self.shift_y;
 
-	local angelNew = math.acos( (bezierX - x1) / math.sqrt( math.pow(bezierX - x1, 2) + math.pow(bezierY - y1, 2) ));
+	local unitAngel = self.angel;
+	
+	local currentPosX = self.unitGroup.x;
+	local currentPosY = self.unitGroup.y;
+
+	-- 0.393 - rotation angel in rad, 22.5 degrees
+	local basicRad = 0.393;
+	local basicAngel = 22.5;
+
+	-- FIXME: revise rotation angel construction
+	local angelNew = math.acos( (newUnitPosX - currentPosX) 
+			/ math.sqrt( math.pow(newUnitPosX - currentPosX, 2) + math.pow(newUnitPosY - currentPosY, 2) ));
 
 	local isUnitAnimationChanged = false;
 	if ( math.abs(angelNew - unitAngel) > basicRad ) then
 		isUnitAnimationChanged = true;
 		
-		-- 0, 15 - 16 frames
+		-- 0, 15 - because 16 frames
 		for i = 0, 15 do
 			if (angelNew > (basicRad * i) and angelNew < (basicRad * (i + 1)) ) then
 				local movementType = (i * basicAngel) .. "_degree_run";
@@ -123,6 +158,8 @@ function unitClass:calculateUnitPosition(tick, path)
 		isUnitAnimationChanged = false;
 		self.angel = angelNew;
 	end
+
+	self:setPosition(newUnitPosX, newUnitPosY);
 end
 
 -- FIXME: factorial calculations could be cached

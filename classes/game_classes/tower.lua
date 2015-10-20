@@ -159,6 +159,8 @@ function towerClass:listen()
 
 	self.sprite.touch = function(self, event)
 		tower:touch(event);
+
+		return true;
 	end
 
 	self.sprite:addEventListener("touch");

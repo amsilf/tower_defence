@@ -40,20 +40,36 @@ function waveClass.new(params)
 	return newWave;
 end
 
+function waveClass:destoryWave()
+	self.unitsType = nil;
+	self.unitsPerRow = nil;
+	self.numUnits = nil;
+	self.nextWaves = nil;
+	self.path = nil;
+
+	self.units_static = nil;
+
+	self.units = nil;
+
+	self = nil;
+end
+
 function waveClass:initUnits()
 	units_parameters = {};
 	units_parameters["type"] = self.unitsType;
 	units_parameters["static"] = self.units_static;
 
 	local tmpUnit = nil;
-	local startEndPoints = self.path["start_end"];
+	local startEndPoints = self.path["start_end_points"];
 	local row_number = 0;
 	for i = 1, self.numUnits do
 		tmpUnit = unitClass.new(units_parameters);
 
+		tmpUnit:setPosition( startEndPoints["start_x"], startEndPoints["start_y"]);
+
 		-- FIXME move these params into config
-		tmpUnit:setPosition( startEndPoints["start_x"] + 40 * i + 20 * row_number, 
-			startEndPoints["start_y"] + 40 * i - 140 * row_number );	
+		-- FIXME think about proper shif
+		tmpUnit:setShift(70 * i, 0);	
 
 		if (i % self.unitsPerRow == 0) then
 			row_number = row_number + 1;
@@ -68,5 +84,16 @@ function waveClass:calculateWaveMovement(tick)
 		currUnit:calculateUnitPosition(tick, self.path);
 	end
 end
+
+--[[
+function waveClass:checkIfTheLineCrossed(unit, direction, start_x, start_y, end_x, end_y)
+
+	if (  ) then
+		return true;
+	end
+
+	return false;
+end
+]]--
 
 return waveClass;

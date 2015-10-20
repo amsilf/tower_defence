@@ -19,7 +19,7 @@ resourcesClass = {
 	healthLabel = nil,
 	healthImage = nil,
 
-	wavesLavel = nil,
+	wavesLabel = nil,
 	wavesImage = nil,
 
 	creditsLabel = nil,
@@ -35,9 +35,9 @@ function resourcesClass:init(params)
 	self.static = params["static"];
 
 	-- init images and labels
-	self.healthLabel = display.newText(self.health, 100, 40, native.systemFont, 30);
-	self.wavesLavel = display.newText(self.waves .. "/" .. self.waves_total, -54, 90, native.systemFont, 30);
-	self.creditsLabel = display.newText(self.credits, -60, 40, native.systemFont, 30);
+	self.healthLabel = display.newText(self.health, -50, 70, native.systemFont, 30);
+	self.creditsLabel = display.newText(self.credits, -50, 120, native.systemFont, 30);
+	self.wavesLabel = display.newText(self.waves .. "/" .. self.waves_total, -50, 170, native.systemFont, 30);
 end
 
 function resourcesClass:checkResourcesBuild(type)
@@ -78,7 +78,40 @@ function resourcesClass:checkResourcesBuild(type)
 	end
 end
 
-function resourcesClass:checkResourcesForUpgrade(type)
+function resourcesClass:buildTower(type)
+	if (type == "turret") then
+		self.credits = self.credits - self.static["turret"]["price"];
+	end
+
+	if (type == "laser") then
+		self.credits = self.credits - self.static["laser"]["price"];
+	end
+
+	if (type == "rocket") then
+		self.credits = self.credits - self.static["rocket"]["price"];
+	end
+
+	if (type == "plasma") then
+		self.credits = self.credits - self.static["plasma"]["price"];
+	end
+
+
+	self:updateCreditsLabel();
+end
+
+function resourcesClass:checkResourcesForUpgrade(type, level)
+end
+
+function resourcesClass:updateHealthLabel()
+	self.healthLabel.text = self.health;
+end
+
+function resourcesClass:updateWavesLabel()
+	self.wavesLabel.text = self.waves .. "/" .. self.waves_total;
+end
+
+function resourcesClass:updateCreditsLabel()
+	self.creditsLabel.text = self.credits;
 end
 
 return resourcesClass;
