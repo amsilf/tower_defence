@@ -11,6 +11,7 @@ local blankTowerClass = require("classes.game_classes.blank_tower");
 local resourcesClass = require("classes.game_classes.resources");
 local towerClass = require("classes.game_classes.tower");
 local waveClass = require("classes.game_classes.wave");
+local securedZoneClass = require("classes.game_classes.secured_zone");
 
 local levelClass = {};
 
@@ -19,6 +20,10 @@ levelClass = {
 	blankTowers = {},
 	waves = {},
 	dialogs = {},
+
+	securedZones = {},
+
+	nextWaveButtons = {},
 
 	time = 0;
 
@@ -37,13 +42,18 @@ function levelClass:readConfig(configPath)
 
 	-- init resources
 	-- FIMME - 10 must be real waves number
-	self:initResources( levelParams["level_resources"], self.levelConfig["static_resources_conf"]["resources"], 10 );
+	self:initResources( levelParams["level_resources"], self.levelConfig["static_resources_conf"]["resources"], 
+		-- number of waves
+		#self.levelConfig["waves_conf"]["waves"] );
 
 	-- init blank towers
 	self:initBlankTowes( levelParams["blanks_towers"], self.levelConfig["static_towers_conf"] );
 
 	-- init towers
 	self:initTowers( levelParams["towers"], self.levelConfig["static_towers_conf"] );
+
+	-- init secured zone
+	self:initSecuredZone( levelParams["secured_zones"] );
 
 	-- init waves
 	self:initWaves( self.levelConfig["waves_conf"]["waves"], self.levelConfig["static_units_conf"], levelParams["paths"] );
@@ -58,6 +68,7 @@ function levelClass:initMainDisplay(imagePath)
 	self.backgroundImage:toBack();
 
 	-- BEGIN - DEBUG ONLY
+
 	local function onObjectTouch( event )
 		print("x = [ " .. event.x .. " ], y = [ " .. event.y .. " ]");
 	end
@@ -79,9 +90,9 @@ function levelClass:initBlankTowes(blankTowersConfig, staticTowersConfig)
 
 	local tmpBlankTower = nil;
 	for i, blankTower in ipairs(blankTowersConfig) do
-		tmpBlankTower = blankTowerClass.new( staticBlankTowerConfig, self);
+		tmpBlankTower = blankTowerClass.new(staticBlankTowerConfig, self);
 
-		tmpBlankTower:setDisplayPosition( blankTower["x"], blankTower["y"] );
+		tmpBlankTower:setDisplayPosition(blankTower["x"], blankTower["y"]);
 
 		table.insert(self.blankTowers, tmpBlankTower);
 	end
@@ -92,7 +103,7 @@ function levelClass:initTowers(towersConfig, staticTowersConfig)
 
 	local tmpTower = nil;
 	for i, tower in pairs(towersConfig) do
-		tmpTower = towerClass.new( staticTowersConfig[ tower["type"] ], self );
+		tmpTower = towerClass.new(towersConfig["type"], staticTowersConfig[ tower["type"] ], self );
 
 		tmpTower:setTowerPosition( tower["x"], tower["y"] );
 
@@ -107,9 +118,17 @@ function levelClass:initWaves(wavesConfig, unitsConfig, levelPaths)
 		currWaveCfg["static_units"] = unitsConfig;
 		currWaveCfg["levelPaths"] = levelPaths;
 
-		tmpWave = waveClass.new(currWaveCfg);
+		tmpWave = waveClass.new(currWaveCfg, self);
 
 		table.insert(self.waves, tmpWave);
+	end
+end
+
+function levelClass:initSecuredZone(zonesConfig)
+	local tmpZone = nil;
+	for i, currZoneConfig in pairs(zonesConfig) do
+		tmpZone = securedZoneClass.new(currZoneConfig);
+		table.insert(self.securedZones, tmpZone);
 	end
 end
 
@@ -130,14 +149,16 @@ function levelClass:checkWavesQueue(tick)
 
 end
 
-function levelClass:dicreaseHealth()
-	self.resources.healt = self.resources.health - 1;
-
-	if ( self.resources.health == 0 ) then
-		print("... GAME OVER ...");
+function levelClass:checkInUnitInSecuredZone(x, y)
+	for i, currZone in pairs(self.securedZones) do
+		if (currZone:isObjectInZone(x, y)) then
+			return true;
+		end
 	end
+end
 
-	self.resources:updateHealthLabel();
+function levelClass:dicreaseHealth()
+	resourcesClass:decreaseHealth();
 end
 
 function levelClass:onTick()
@@ -170,7 +191,35 @@ function levelClass:checkResourcesUpgrade(type, level)
 	return resourcesClass:checkResourcesForUpgrade(type, level);
 end
 
+function levelClass:upgradeTower(type, level)
+	resourcesClass:buildOrUpgradeTower(type, level);
+end
+
+function levelClass:upgradeCharacteristics(type, level)
+	return resourcesClass:upgradeCharacteristics(type, level);
+end
+
+function levelClass:sellTower(tower, type, level)
+	-- FIXME double click workaround
+	if (tower.towerGroup ~= nil) then
+		resourcesClass:sellTower(type, level);
+
+		self:putBlankTower(tower.towerGroup.x, tower.towerGroup.y);
+
+		tower:destroyTower();
+	end
+end
+
+function levelClass:putBlankTower(x, y)
+	local tmpBlankTower = blankTowerClass.new(self.levelConfig["static_towers_conf"]["blank_tower"], self);
+
+	tmpBlankTower:setDisplayPosition(x, y);
+
+	table.insert(self.blankTowers, tmpBlankTower);
+end
+
 function levelClass:buildTower(blankTower, event, type)
+	-- FIXME double click workaround
  	if (blankTower.blankTowerGroup ~= nil) then
 	 	local bt_x = blankTower.blankTowerGroup.x;
 	 	local bt_y = blankTower.blankTowerGroup.y;
@@ -186,9 +235,9 @@ end
 
 function levelClass:buildNewTower(type, x, y)
 	local static_towers_conf = self.levelConfig["static_towers_conf"][type];
-	local newTower = towerClass.new(static_towers_conf, self);
+	local newTower = towerClass.new(type, static_towers_conf, self);
 
-	resourcesClass:buildTower(type);
+	resourcesClass:buildOrUpgradeTower(type, "1");
 
 	newTower:setTowerPosition(x, y);
 

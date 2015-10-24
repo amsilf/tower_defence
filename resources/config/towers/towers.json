@@ -67,10 +67,9 @@
 		"type": "turret",
 		
 		"speed": 1,
-		"level": 1,
+		"level": "1",
 		"range": 150,
-		"cost": 100,
-		"upgradeCost": "120",
+		"price": 100,
 
 		"gui": {
 

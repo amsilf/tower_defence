@@ -12,7 +12,7 @@
 		"static_resources": "resources/config/static_resources/resources.json",
 
 		"level_resources": {
-			"credits": 120,
+			"credits": 230,
 			"health": 20
 		},
 
@@ -126,9 +126,36 @@
 			}
 		},
 
+		"secured_zones": [
+			{
+				"id": "nort-west",
+
+				"top_left_corner": {
+					"x": -103, 
+					"y": 8
+				},
+
+				"top_right_corner": {
+					"x": 103,
+					"y": 102,
+				},
+
+				"bottom_right_corner": {
+					"x": 31,
+					"y": 167
+				},
+
+				"bottom_left_corner": {
+					"x": -158,
+					"y": 77
+				}
+			}
+		],
+
 		"towers": [
 			{
 				"type": "turret",
+				"level": "1",
 				"x": 270,
 				"y": 300
 			}

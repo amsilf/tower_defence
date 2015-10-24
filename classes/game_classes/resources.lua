@@ -41,9 +41,10 @@ function resourcesClass:init(params)
 end
 
 function resourcesClass:checkResourcesBuild(type)
+	-- "1" stands for 1st level
 	if (type == "turret") then
 		-- 1 - first level
-		if (self.credits >= self.static["turret"]["price"]) then
+		if (self.credits >= self.static["turret"]["1"]["price"]) then
 			return true;
 		else
 			return false;
@@ -52,7 +53,7 @@ function resourcesClass:checkResourcesBuild(type)
 
 	if (type == "laser") then
 		-- 1 - first level
-		if (self.credits >= self.static["laser"]["price"]) then
+		if (self.credits >= self.static["laser"]["1"]["price"]) then
 			return true;
 		else
 			return false;
@@ -61,7 +62,7 @@ function resourcesClass:checkResourcesBuild(type)
 
 	if (type == "rocket") then
 		-- 1 - first level
-		if (self.credits >= self.static["rocket"]["price"]) then
+		if (self.credits >= self.static["rocket"]["1"]["price"]) then
 			return true;
 		else
 			return false;
@@ -70,7 +71,7 @@ function resourcesClass:checkResourcesBuild(type)
 
 	if (type == "plasma") then
 		-- 1 - first level
-		if (self.credits >= self.static["plasma"]["price"]) then
+		if (self.credits >= self.static["plasma"]["1"]["price"]) then
 			return true;
 		else
 			return false;
@@ -78,21 +79,22 @@ function resourcesClass:checkResourcesBuild(type)
 	end
 end
 
-function resourcesClass:buildTower(type)
+function resourcesClass:buildOrUpgradeTower(type, level)
+	-- "1" - because of 1th level
 	if (type == "turret") then
-		self.credits = self.credits - self.static["turret"]["price"];
+		self.credits = self.credits - self.static["turret"][level]["price"];
 	end
 
 	if (type == "laser") then
-		self.credits = self.credits - self.static["laser"]["price"];
+		self.credits = self.credits - self.static["laser"][level]["price"];
 	end
 
 	if (type == "rocket") then
-		self.credits = self.credits - self.static["rocket"]["price"];
+		self.credits = self.credits - self.static["rocket"][level]["price"];
 	end
 
 	if (type == "plasma") then
-		self.credits = self.credits - self.static["plasma"]["price"];
+		self.credits = self.credits - self.static["plasma"][level]["price"];
 	end
 
 
@@ -100,6 +102,49 @@ function resourcesClass:buildTower(type)
 end
 
 function resourcesClass:checkResourcesForUpgrade(type, level)
+
+	if (type == "turret") then
+		if (self.credits >= self.static["turret"][level]["price"]) then
+			return true;
+		else
+			return false;
+		end
+	end
+
+	if (type == "rocket") then
+		if (self.credits >= self.static["rocket"][level]["price"]) then
+			return true;
+		else
+			return false;
+		end
+	end
+
+	if (type == "laser") then
+		if (self.credits >= self.static["laser"][level]["price"]) then
+			return true;
+		else
+			return false;
+		end
+	end
+
+	if (type == "plasma") then
+		if (self.credits >= self.static["plasma"][level]["price"]) then
+			return true;
+		else
+			return false;
+		end
+	end
+
+end
+
+function resourcesClass:sellTower(type, level)
+	self.credits = self.credits + (self.static[type][level]["price"] / 2);
+
+	self:updateCreditsLabel();
+end
+
+function resourcesClass:upgradeCharacteristics(type, level)
+	return self.static[type][level];
 end
 
 function resourcesClass:updateHealthLabel()
@@ -112,6 +157,11 @@ end
 
 function resourcesClass:updateCreditsLabel()
 	self.creditsLabel.text = self.credits;
+end
+
+function resourcesClass:decreaseHealth()
+	self.health = self.health - 1;
+	self:updateHealthLabel();
 end
 
 return resourcesClass;

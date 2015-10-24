@@ -105,6 +105,11 @@ end
 
 function unitClass:calculateUnitPosition(tick, path)
 
+	-- FIXME workaround because of unproper destory
+	if (self.unitGroup == nil) then
+		return;
+	end
+
 	-- TODO: could be cached
 	-- creating points array
 	local pointsX = {};

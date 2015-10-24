@@ -15,6 +15,8 @@ waveClass = {
 	nextWaves = nil,
 	path = nil,
 
+	level = nil,
+
 	units_static = nil,
 
 	units = nil,
@@ -22,7 +24,7 @@ waveClass = {
 
 local waveClass_mt = { __index = waveClass }
 
-function waveClass.new(params)
+function waveClass.new(params, level)
 	local newWave = {
 		unitsType = params["unitsType"],
 		unitsPerRow = params["units_per_row"],
@@ -32,6 +34,8 @@ function waveClass.new(params)
 
 		units = {}
 	}
+
+	newWave.level = level;
 
 	setmetatable(newWave, waveClass_mt);
 
@@ -79,21 +83,24 @@ function waveClass:initUnits()
 	end
 end
 
-function waveClass:calculateWaveMovement(tick)
+function waveClass:calculateWaveMovement(tick, securedZones)
 	for i, currUnit in ipairs(self.units) do
+
 		currUnit:calculateUnitPosition(tick, self.path);
+
+		-- FIXME unproper delete
+		if (currUnit.unitGroup ~= nil) then
+			if (self.level:checkInUnitInSecuredZone(currUnit.unitGroup.x, currUnit.unitGroup.y) == true) then
+				currUnit:destroyUnit();
+				self.level:dicreaseHealth();
+
+				self.numUnits = self.numUnits -1;
+				if (self.numUnits == 0) then
+					-- destroy wave
+				end
+			end
+		end
 	end
 end
-
---[[
-function waveClass:checkIfTheLineCrossed(unit, direction, start_x, start_y, end_x, end_y)
-
-	if (  ) then
-		return true;
-	end
-
-	return false;
-end
-]]--
 
 return waveClass;

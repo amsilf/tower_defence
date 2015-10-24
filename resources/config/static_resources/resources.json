@@ -8,27 +8,107 @@
 		},
 
 		"turret": {
-			"price": 100,
-			"sell": 50,
-			"upgrade": [120, 150, 200, 300]
+			"1": {
+				"price": 100,
+				"speed": 1,
+				"range": 150 
+			},
+
+			"2": {
+				"price": 120,
+				"speed": 1,
+				"range": 150 
+			},
+
+			"3": {
+				"price": 100,
+				"speed": 1,
+				"range": 150 
+			},
+
+			"4": {
+				"price": 100,
+				"speed": 1,
+				"range": 150 
+			}
 		},
 
 		"rocket": {
-			"price": 120,
-			"sell": 50,
-			"upgrade": [120, 150, 200, 300]
+			"1": {
+				"price": 100,
+				"speed": 1,
+				"range": 150 
+			},
+
+			"2": {
+				"price": 120,
+				"speed": 1,
+				"range": 150 
+			},
+
+			"3": {
+				"price": 100,
+				"speed": 1,
+				"range": 150 
+			},
+
+			"4": {
+				"price": 100,
+				"speed": 1,
+				"range": 150 
+			}
 		},
 
 		"laser": {
-			"price": 150,
-			"sell": 50,
-			"upgrade": [120, 150, 200, 300]
+			"1": {
+				"price": 100,
+				"speed": 1,
+				"range": 150 
+			},
+
+			"2": {
+				"price": 120,
+				"speed": 1,
+				"range": 150 
+			},
+
+			"3": {
+				"price": 100,
+				"speed": 1,
+				"range": 150 
+			},
+
+			"4": {
+				"price": 100,
+				"speed": 1,
+				"range": 150 
+			}
 		},
 
 		"plasma": {
-			"price": 200,
-			"sell": 50,
-			"upgrade": [120, 150, 200, 300]
+			"1": {
+				"price": 100,
+				"speed": 1,
+				"range": 150 
+			},
+
+			"2": {
+				"price": 120,
+				"speed": 1,
+				"range": 150 
+			},
+
+			"3": {
+				"price": 100,
+				"speed": 1,
+				"range": 150 
+			},
+
+			"4": {
+				"price": 100,
+				"speed": 1,
+				"range": 150 
+			}
 		},
 
 		"mariner": {

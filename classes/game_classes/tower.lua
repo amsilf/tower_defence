@@ -11,11 +11,11 @@ local sprites_sequences = require("objects_sequences");
 local towerClass = {};
 
 towerClass = {
+	towerType = nil,
 	speed = 1,
-	level = 1,
+	towerLevel = 1,
 	range = 150,
-	cost = 100,
-	upgradeCost = 120,
+	price = 100,
 
 	sprite = nil,
 
@@ -29,13 +29,13 @@ towerClass = {
 
 local towerClass_mt = { __index = towerClass }
 
-function towerClass.new(params, level)
+function towerClass.new(type, params, level)
 	local newTower = {
+		towerType = type,
 		speed = params["speed"],
-		level = params["level"],
+		towerLevel = params["level"],
 		range = params["range"],
-		cost = params["cost"],
-		upgradeCost = params["upgradeCost"],
+		price = params["price"],
 
 		sprite = nil,
 
@@ -106,16 +106,6 @@ function towerClass.new(params, level)
 	return newTower;
 end
 
-function towerClass:hideMenu()
-	self.towerRange.alpha = 0.5;
-
-	self.upgradeButton.alpha = 1;
-	self.upgradeButton.isEnable = true;
-
-	self.sellButton.alpha = 1;
-	self.sellButton.isEnable = true;	
-end
-
 function towerClass.initTowerSprite(params)
 	local towerSpriteParams = params["gui"];
 	local towerOptions = {
@@ -130,6 +120,11 @@ function towerClass.initTowerSprite(params)
 end
 
 function towerClass:hideMenu()
+	-- FIXME workaround to prevent double clicking
+	if (self.towerGroup == nil) then
+		return;
+	end
+
 	self.towerRange.alpha = 0;
 
 	self.upgradeButton.alpha = 0;
@@ -142,8 +137,13 @@ end
 function towerClass:touch(event)
 	self.towerRange.alpha = 0.5;
 
-	self.upgradeButton.alpha = 1;
-	self.upgradeButton.isEnable = true;
+	if ( self.level:checkResourcesUpgrade(self.towerType, tostring(tonumber(self.towerLevel) + 1)) == true ) then
+		self.upgradeButton.alpha = 1;
+		self.upgradeButton.isEnable = true;
+	else
+		self.upgradeButton.alpha = 0.5;
+		self.upgradeButton.isEnable = false;		
+	end
 
 	self.sellButton.alpha = 1;
 	self.sellButton.isEnable = true;
@@ -154,14 +154,74 @@ function towerClass:setTowerPosition(x, y)
 	self.towerGroup.y = y;
 end
 
+-- FIXME: double click!!!
+function towerClass:upgrade(event)
+	if (event.phase == "ended") then
+		print("Upgrade, level = " .. self.towerLevel);
+		self.towerLevel = tostring(tonumber(self.towerLevel) + 1);
+
+		local upgradeCharacteristics = self.level:upgradeCharacteristics(self.towerType, self.towerLevel);
+
+		self.price = upgradeCharacteristics["price"];
+		self.range = upgradeCharacteristics["range"];
+		self.speed = upgradeCharacteristics["speed"];
+
+		self.level:upgradeTower(self.towerType, self.towerLevel);
+	end
+
+	return true;
+end
+
+function towerClass:destroyTower()
+	if (self.upgradeButton ~= nil) then
+		self.upgradeButton:removeSelf();
+		self.upgradeButton = nil;
+	end
+
+	if (self.sellButton ~= nil) then
+		self.sellButton:removeSelf();
+		self.sellButton = nil;
+	end
+
+	if (self.towerRange ~= nil) then
+		self.towerRange:removeSelf();
+		self.towerRange = nil;
+	end
+
+	if (self.towerGroup ~= nil) then
+		self.towerGroup:removeSelf();
+		self.towerGroup = nil;
+	end
+end
+
+function towerClass:sell(event)
+	self.level:sellTower(self, self.towerType, self.towerLevel);
+end
+
 function towerClass:listen()
 	local tower = self;
 
 	self.sprite.touch = function(self, event)
 		tower:touch(event);
+		return true;
+	end
+
+	self.upgradeButton.touch = function (self, event)
+		if (self.isEnable == true) then
+			tower:upgrade(event);
+		end
 
 		return true;
 	end
+
+	self.sellButton.touch = function (self, event)
+		tower:sell(event);
+
+		return true;
+	end
+
+	self.sellButton:addEventListener("touch", self.sellButton);
+	self.upgradeButton:addEventListener("touch", self.upgradeButton);
 
 	self.sprite:addEventListener("touch");
 end
