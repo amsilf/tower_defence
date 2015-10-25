@@ -76,7 +76,6 @@ function waveClass:initUnits()
 	for i = 1, self.numUnits do
 
 		currTimeShift = ( 1 / self.numUnits ) * i * 0.01;
-		print("i = " .. i .. ", timeShift = " .. currTimeShift);
 		tmpUnit = unitClass.new(units_parameters, currTimeShift);
 
 		tmpUnit:setPosition( startEndPoints["start_x"], startEndPoints["start_y"]);

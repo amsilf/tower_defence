@@ -26,13 +26,6 @@
 					"end_y": 60
 				},
 
-				"end_line": {
-					"start_x": 1,
-					"start_y": 2,
-					"end_x": 4,
-					"end_y": 5
-				},
-
 				"points": [
 					{
 						"x": 1090,
@@ -103,7 +96,7 @@
 			},
 
 			"south-west": {
-				"start_end": {
+				"start_end_points": {
 					"start_x": 100,
 					"start_y": 800,
 

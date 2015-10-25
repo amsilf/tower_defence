@@ -1,27 +1,29 @@
 {
 	"name": "Map-2: Saint-Petersurg waves",
 
-	"waves": {
-		"1": {
+	"waves": [
+		{
 			"num_units": 8,
 			"units_per_row": 2,
 			"type": "mariner",
 			"path": "norts-east-west",
-			"next_waves": [2, 3]
+			"abs_time": 10,
 		},
 
-		"2": {
+		{
 			"num_units": 8,
 			"units_per_row": 2,
 			"type": "mariner",
-			"path": "norts-east-west",
+			"path": "south-west",
+			"abs_time": 20
 		},
 
-		"3": {
+		{
 			"num_units": 8,
 			"units_per_row": 2 ,
 			"type": "mariner",
 			"path": "norts-east-west",
+			"abs_time": 20
 		},
-	}
+	]
 }

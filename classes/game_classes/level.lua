@@ -25,7 +25,9 @@ levelClass = {
 
 	nextWaveButtons = {},
 
-	time = 0;
+	bezierTime = 0,
+	
+	absTime = 1,
 
 	backgroundImage = {},
 	levelConfig = {}
@@ -55,8 +57,10 @@ function levelClass:readConfig(configPath)
 	-- init secured zone
 	self:initSecuredZone( levelParams["secured_zones"] );
 
-	-- init waves
-	self:initWaves( self.levelConfig["waves_conf"]["waves"], self.levelConfig["static_units_conf"], levelParams["paths"] );
+	-- init waves timer
+	timer.performWithDelay(1000, self, 0);
+
+	--self:initWaves( self.levelConfig["waves_conf"]["waves"], self.levelConfig["static_units_conf"], levelParams["paths"] );
 
 	-- global listeners initialization
 	self:listen();
@@ -111,19 +115,6 @@ function levelClass:initTowers(towersConfig, staticTowersConfig)
 	end
 end
 
-function levelClass:initWaves(wavesConfig, unitsConfig, levelPaths)
-	local tmpWave = nil;
-
-	for i, currWaveCfg in pairs(wavesConfig) do
-		currWaveCfg["static_units"] = unitsConfig;
-		currWaveCfg["levelPaths"] = levelPaths;
-
-		tmpWave = waveClass.new(currWaveCfg, self);
-
-		table.insert(self.waves, tmpWave);
-	end
-end
-
 function levelClass:initSecuredZone(zonesConfig)
 	local tmpZone = nil;
 	for i, currZoneConfig in pairs(zonesConfig) do
@@ -145,8 +136,28 @@ function levelClass:touch(event)
 	return true;
 end
 
-function levelClass:checkWavesQueue(tick)
+function levelClass:timer(event)
+	
+	local levelWaves = self.levelConfig["waves_conf"]["waves"];
+	
+	for i, currWave in pairs(levelWaves) do
+		if (currWave["abs_time"] == self.absTime) then
+			self:createWave(currWave, self.levelConfig["static_units_conf"], self.levelConfig["params"]["paths"]);
+		end
+	end
 
+	self.absTime = self.absTime + 1;
+end
+
+function levelClass:createWave(waveConfig, unitsConfig, levelPaths)
+	local tmpWave = nil;
+
+	waveConfig["static_units"] = unitsConfig;
+	waveConfig["levelPaths"] = levelPaths;
+
+	tmpWave = waveClass.new(waveConfig, self);
+
+	table.insert(self.waves, tmpWave);
 end
 
 function levelClass:cleanWaves()
@@ -171,15 +182,15 @@ function levelClass:dicreaseHealth()
 end
 
 function levelClass:onTick()
-	self.time = self.time + 0.01;
+	self.bezierTime = self.bezierTime + 0.01;
 
 	self:objectsMovments();
 
 	-- TODO: thinks about proper timing implementation
 	-- bezier constant
 	-- FIXME: advanced threshold calculation
-	if (self.time > 1.2) then
-		self.time = 0;
+	if (self.bezierTime > 1.2) then
+		self.bezierTime = 0;
 	end
 end
 
@@ -257,12 +268,12 @@ end
 function levelClass:objectsMovments()
 	-- waves movements
 	for i, currWave in ipairs(self.waves) do
-		currWave:calculateWaveMovement(self.time, path);
+		currWave:calculateWaveMovement(self.bezierTime, path);
 	end
 
 	-- towers rotation
 	for i, currTower in ipairs(self.towers) do
-		currTower:calculateRotation(self.time);
+		currTower:calculateRotation(self.bezierTime);
 	end
 
 	-- shots
