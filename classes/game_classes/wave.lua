@@ -44,6 +44,9 @@ function waveClass.new(params, level)
 	return newWave;
 end
 
+function waveClass:cleanUnits()
+end
+
 function waveClass:destoryWave()
 	self.unitsType = nil;
 	self.unitsPerRow = nil;
@@ -66,8 +69,15 @@ function waveClass:initUnits()
 	local tmpUnit = nil;
 	local startEndPoints = self.path["start_end_points"];
 	local row_number = 0;
+
+	local tickDelta = 0.01;
+
+	local currTimeShift = nil;
 	for i = 1, self.numUnits do
-		tmpUnit = unitClass.new(units_parameters);
+
+		currTimeShift = ( 1 / self.numUnits ) * i * 0.01;
+		print("i = " .. i .. ", timeShift = " .. currTimeShift);
+		tmpUnit = unitClass.new(units_parameters, currTimeShift);
 
 		tmpUnit:setPosition( startEndPoints["start_x"], startEndPoints["start_y"]);
 

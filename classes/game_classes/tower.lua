@@ -6,7 +6,7 @@
 
 local widget = require("widget");
 
-local sprites_sequences = require("objects_sequences");
+local sprites_sequences = require("classes.game_classes.objects_sequences");
 
 local towerClass = {};
 

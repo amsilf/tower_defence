@@ -4,6 +4,8 @@
 --
 -----------------------------------------------------------------------------------------
 
+local sprites_sequences = require("classes.game_classes.objects_sequences");
+
 local unitClass = {};
 unitClass = {
 	sprite = nil,
@@ -14,6 +16,7 @@ unitClass = {
 	armor = 0,
 	
 	-- path related properties
+	timeShift = 0,
 	angel = 0,
 	shift_x = 0,
 	shift_y = 0,
@@ -24,7 +27,7 @@ unitClass = {
 local unitClass_mt = { __index = unitClass }
 
 -- global functions
-function unitClass.new()
+function unitClass.new(params, timeShift)
 	local newUnit = {
 		sprite = nil,
 		unitGroup = nil,
@@ -40,6 +43,8 @@ function unitClass.new()
 		points_x = {},
 		points_y = {}
 	};
+
+	newUnit.timeShift = timeShift;
 
 	-- FIXME revise calls and pass parameters
 	newUnit.sprite = initUnitSprite("mariner");
@@ -125,8 +130,8 @@ function unitClass:calculateUnitPosition(tick, path)
 	table.insert(pointsX, path["start_end_points"]["end_x"]);
 	table.insert(pointsY, path["start_end_points"]["end_y"]);
 
-	local bezierX = unitClass.calculateBizerApproximation(tick, pointsX);
-	local bezierY = unitClass.calculateBizerApproximation(tick, pointsY);
+	local bezierX = unitClass.calculateBizerApproximation(tick - self.timeShift, pointsX);
+	local bezierY = unitClass.calculateBizerApproximation(tick - self.timeShift, pointsY);
 
 	local newUnitPosX = bezierX + self.shift_x;
 	local newUnitPosY = bezierY + self.shift_y;

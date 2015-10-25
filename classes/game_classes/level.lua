@@ -4,7 +4,7 @@
 --
 -----------------------------------------------------------------------------------------
 
-local configReader = require("config_reader");
+local configReader = require("classes.utils.config_reader");
 
 -- game classes
 local blankTowerClass = require("classes.game_classes.blank_tower");
@@ -149,6 +149,15 @@ function levelClass:checkWavesQueue(tick)
 
 end
 
+function levelClass:cleanWaves()
+end
+
+function levelClass:cleanTowers()
+end
+
+function levelClass:cleanBlankTowers()
+end
+
 function levelClass:checkInUnitInSecuredZone(x, y)
 	for i, currZone in pairs(self.securedZones) do
 		if (currZone:isObjectInZone(x, y)) then
@@ -168,7 +177,8 @@ function levelClass:onTick()
 
 	-- TODO: thinks about proper timing implementation
 	-- bezier constant
-	if (self.time > 1) then
+	-- FIXME: advanced threshold calculation
+	if (self.time > 1.2) then
 		self.time = 0;
 	end
 end

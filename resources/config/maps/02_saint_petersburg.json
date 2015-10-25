@@ -13,7 +13,7 @@
 
 		"level_resources": {
 			"credits": 230,
-			"health": 20
+			"health": 1000
 		},
 
 		"paths": {
