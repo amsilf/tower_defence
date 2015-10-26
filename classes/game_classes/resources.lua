@@ -151,7 +151,8 @@ function resourcesClass:updateHealthLabel()
 	self.healthLabel.text = self.health;
 end
 
-function resourcesClass:updateWavesLabel()
+function resourcesClass:increaseWavesCounter()
+	self.waves = self.waves + 1;
 	self.wavesLabel.text = self.waves .. "/" .. self.waves_total;
 end
 

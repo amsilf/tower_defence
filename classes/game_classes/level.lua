@@ -143,6 +143,7 @@ function levelClass:timer(event)
 	for i, currWave in pairs(levelWaves) do
 		if (currWave["abs_time"] == self.absTime) then
 			self:createWave(currWave, self.levelConfig["static_units_conf"], self.levelConfig["params"]["paths"]);
+			resourcesClass:increaseWavesCounter();
 		end
 	end
 
@@ -160,13 +161,30 @@ function levelClass:createWave(waveConfig, unitsConfig, levelPaths)
 	table.insert(self.waves, tmpWave);
 end
 
+-- FIXME: proper wave cleaning - doesn't work properly now!
 function levelClass:cleanWaves()
+	for i, currWave in pairs(self.waves) do
+		if (currWave.unitsType == nil) then
+			currWave:cleanUnits();
+			table.remove(self.waves, i);
+		end
+	end
 end
 
 function levelClass:cleanTowers()
+	for i, currTower in pairs(self.towers) do
+		if (currTower.towerGroup == nil) then
+			table.remove(self.towers, i);
+		end
+	end
 end
 
 function levelClass:cleanBlankTowers()
+	for i, currBlankTower in pairs(self.blankTowers) do
+		if (currBlankTower.towerGroup == nil) then
+			table.remove(self.blankTowers, i);
+		end
+	end
 end
 
 function levelClass:checkInUnitInSecuredZone(x, y)
@@ -228,6 +246,7 @@ function levelClass:sellTower(tower, type, level)
 		self:putBlankTower(tower.towerGroup.x, tower.towerGroup.y);
 
 		tower:destroyTower();
+		self:cleanTowers();
 	end
 end
 
@@ -248,6 +267,8 @@ function levelClass:buildTower(blankTower, event, type)
 		blankTower:destroyBlankTower();
 		blankTower = nil;
 
+		self:cleanBlankTowers();
+
 		self:buildNewTower(type, bt_x, bt_y);
 	end
 
@@ -263,6 +284,12 @@ function levelClass:buildNewTower(type, x, y)
 	newTower:setTowerPosition(x, y);
 
 	table.insert(self.towers, newTower);
+end
+
+function levelClass:nearestUnitForTower(tower)
+end
+
+function levelClass:isUnitInTowerRange()
 end
 
 function levelClass:objectsMovments()

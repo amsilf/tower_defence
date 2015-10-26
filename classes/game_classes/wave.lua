@@ -12,7 +12,6 @@ waveClass = {
 	unitsType = nil,
 	unitsPerRow = nil,
 	numUnits = nil,
-	nextWaves = nil,
 	path = nil,
 
 	level = nil,
@@ -29,7 +28,6 @@ function waveClass.new(params, level)
 		unitsType = params["unitsType"],
 		unitsPerRow = params["units_per_row"],
 		numUnits = params["num_units"],
-		nextWave = params["next_waves"],
 		path = params["levelPaths"][ params["path"] ],
 
 		units = {}
@@ -45,6 +43,11 @@ function waveClass.new(params, level)
 end
 
 function waveClass:cleanUnits()
+	for i, currUnit in pairs(self.units) do
+		if (currUnit.unitGroup == nil) then
+			table.remove(self.units, i);
+		end
+	end
 end
 
 function waveClass:destoryWave()
@@ -81,7 +84,7 @@ function waveClass:initUnits()
 		tmpUnit:setPosition( startEndPoints["start_x"], startEndPoints["start_y"]);
 
 		-- FIXME move these params into config
-		-- FIXME think about proper shif
+		-- FIXME think about proper shift
 		tmpUnit:setShift(70 * i, 0);	
 
 		if (i % self.unitsPerRow == 0) then
