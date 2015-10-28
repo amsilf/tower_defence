@@ -42,6 +42,10 @@ function waveClass.new(params, level)
 	return newWave;
 end
 
+function waveClass.compareWavesByTime(wave1, wave2)
+	return wave1["abs_time"] > wave2["abs_time"];
+end
+
 function waveClass:cleanUnits()
 	for i, currUnit in pairs(self.units) do
 		if (currUnit.unitGroup == nil) then
@@ -108,7 +112,8 @@ function waveClass:calculateWaveMovement(tick, securedZones)
 
 				self.numUnits = self.numUnits -1;
 				if (self.numUnits == 0) then
-					-- destroy wave
+					self:destoryWave();
+					self.level:cleanWaves();
 				end
 			end
 		end

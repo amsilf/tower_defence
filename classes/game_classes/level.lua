@@ -13,6 +13,8 @@ local towerClass = require("classes.game_classes.tower");
 local waveClass = require("classes.game_classes.wave");
 local securedZoneClass = require("classes.game_classes.secured_zone");
 
+local newWaveButtonClass = require("classes.game_classes.next_wave_button");
+
 local levelClass = {};
 
 levelClass = {
@@ -57,10 +59,12 @@ function levelClass:readConfig(configPath)
 	-- init secured zone
 	self:initSecuredZone( levelParams["secured_zones"] );
 
+	-- init next wave buttons
+	-- FIXME: set up config
+	self:initNextWavesButtons(nil, levelParams["paths"]);
+
 	-- init waves timer
 	timer.performWithDelay(1000, self, 0);
-
-	--self:initWaves( self.levelConfig["waves_conf"]["waves"], self.levelConfig["static_units_conf"], levelParams["paths"] );
 
 	-- global listeners initialization
 	self:listen();
@@ -123,6 +127,19 @@ function levelClass:initSecuredZone(zonesConfig)
 	end
 end
 
+function levelClass:initNextWavesButtons(nextWaveButtonConfig, paths)
+	tmpButton = nil;
+	tmpStartEnd = nil;
+	for pathId, currPath in pairs(paths) do
+		tmpStartEnd = currPath["start_end_points"];
+
+		tmpButton = newWaveButtonClass.new(nextWaveButtonConfig, pathId);
+		tmpButton:setPosition(tmpStartEnd["start_x"], tmpStartEnd["start_y"]);
+
+		table.insert(self.nextWaveButtons, tmpButton);
+	end
+end
+
 -- behaviour
 function levelClass:touch(event)
 	for i, currBlankTower in pairs(levelClass.blankTowers) do
@@ -139,11 +156,21 @@ end
 function levelClass:timer(event)
 	
 	local levelWaves = self.levelConfig["waves_conf"]["waves"];
-	
+
+	table.sort(levelWaves, waveClass.compareWavesByTime);
+
 	for i, currWave in pairs(levelWaves) do
 		if (currWave["abs_time"] == self.absTime) then
 			self:createWave(currWave, self.levelConfig["static_units_conf"], self.levelConfig["params"]["paths"]);
 			resourcesClass:increaseWavesCounter();
+		end
+
+		for i, currButton in pairs(self.nextWaveButtons) do
+			if (currButton.pathId == currWave.path and currButton:getCounter() > 0) then
+				currButton:updateTime(currWave["abs_time"] - self.absTime);
+			else
+				currButton:updateTime(currWave["abs_time"] - self.absTime);
+			end
 		end
 	end
 
@@ -164,8 +191,7 @@ end
 -- FIXME: proper wave cleaning - doesn't work properly now!
 function levelClass:cleanWaves()
 	for i, currWave in pairs(self.waves) do
-		if (currWave.unitsType == nil) then
-			currWave:cleanUnits();
+		if (currWave.units == nil) then
 			table.remove(self.waves, i);
 		end
 	end

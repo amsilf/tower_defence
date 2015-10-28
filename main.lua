@@ -8,6 +8,8 @@
 --local composer = require("composer");
 --composer.gotoScene("scenes.main_menu", "zoomInOutFade");
 
+display.setStatusBar( display.HiddenStatusBar );
+
 -- local imports
 local level = require("classes.game_classes.level");
 
