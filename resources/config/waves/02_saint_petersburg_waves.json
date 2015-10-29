@@ -3,6 +3,7 @@
 
 	"waves": [
 		{
+			"id": 1,
 			"num_units": 8,
 			"units_per_row": 2,
 			"type": "mariner",
@@ -11,6 +12,7 @@
 		},
 
 		{
+			"id": 2,
 			"num_units": 8,
 			"units_per_row": 2,
 			"type": "mariner",
@@ -19,6 +21,7 @@
 		},
 
 		{
+			"id": 3,
 			"num_units": 8,
 			"units_per_row": 2 ,
 			"type": "mariner",

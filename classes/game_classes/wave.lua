@@ -9,10 +9,14 @@ local unitClass = require("classes.game_classes.unit");
 local waveClass = {};
 
 waveClass = {
+	id = nil,
+
 	unitsType = nil,
 	unitsPerRow = nil,
 	numUnits = nil,
 	path = nil,
+
+	absTime = nil,
 
 	level = nil,
 
@@ -25,9 +29,11 @@ local waveClass_mt = { __index = waveClass }
 
 function waveClass.new(params, level)
 	local newWave = {
+		id = params["id"],
 		unitsType = params["unitsType"],
 		unitsPerRow = params["units_per_row"],
 		numUnits = params["num_units"],
+		absTime = params["abs_time"],
 		path = params["levelPaths"][ params["path"] ],
 
 		units = {}
@@ -43,7 +49,7 @@ function waveClass.new(params, level)
 end
 
 function waveClass.compareWavesByTime(wave1, wave2)
-	return wave1["abs_time"] > wave2["abs_time"];
+	return wave1["abs_time"] < wave2["abs_time"];
 end
 
 function waveClass:cleanUnits()

@@ -133,7 +133,7 @@ function levelClass:initNextWavesButtons(nextWaveButtonConfig, paths)
 	for pathId, currPath in pairs(paths) do
 		tmpStartEnd = currPath["start_end_points"];
 
-		tmpButton = newWaveButtonClass.new(nextWaveButtonConfig, pathId);
+		tmpButton = newWaveButtonClass.new(nextWaveButtonConfig, self, pathId);
 		tmpButton:setPosition(tmpStartEnd["start_x"], tmpStartEnd["start_y"]);
 
 		table.insert(self.nextWaveButtons, tmpButton);
@@ -161,20 +161,52 @@ function levelClass:timer(event)
 
 	for i, currWave in pairs(levelWaves) do
 		if (currWave["abs_time"] == self.absTime) then
-			self:createWave(currWave, self.levelConfig["static_units_conf"], self.levelConfig["params"]["paths"]);
+			local newWave = self:createWave(currWave, self.levelConfig["static_units_conf"], self.levelConfig["params"]["paths"]);
+
+			-- faked filed to distingiush active and future waves
+			currWave["is_active"] = "true";
+
+			-- release button
+			for i, currButton in pairs(self.nextWaveButtons) do
+				if (currButton.nextWaveId == currWave["id"]) then
+					currButton.nextWaveId = nil;
+				end
+			end
+
 			resourcesClass:increaseWavesCounter();
 		end
 
 		for i, currButton in pairs(self.nextWaveButtons) do
-			if (currButton.pathId == currWave.path and currButton:getCounter() > 0) then
-				currButton:updateTime(currWave["abs_time"] - self.absTime);
-			else
+			-- link wave and button
+			if (currButton.pathId == currWave.path and currWave["is_active"] == nil and currButton.nextWaveId == nil) then
+				currButton:setNextWaveId( currWave["id"] );
+			end
+
+			if (currButton.nextWaveId ~= nil and currButton.nextWaveId == currWave["id"]) then
 				currButton:updateTime(currWave["abs_time"] - self.absTime);
 			end
 		end
 	end
 
 	self.absTime = self.absTime + 1;
+end
+
+-- required for next wave functionality
+function levelClass:createWaveById(id)
+	local levelWaves = self.levelConfig["waves_conf"]["waves"];
+
+	for i, currWave in pairs(levelWaves) do
+		if (currWave.id == id and currWave["is_active"] ~= "dead") then
+			local waveWithId = self:createWave(currWave, self.levelConfig["static_units_conf"], self.levelConfig["params"]["paths"]);
+
+			waveWithId.absTime = self.absTime;
+
+			-- wave config marked and can't be reused
+			currWave["is_active"] = "dead";
+
+			break;
+		end
+	end
 end
 
 function levelClass:createWave(waveConfig, unitsConfig, levelPaths)
@@ -186,6 +218,8 @@ function levelClass:createWave(waveConfig, unitsConfig, levelPaths)
 	tmpWave = waveClass.new(waveConfig, self);
 
 	table.insert(self.waves, tmpWave);
+
+	return tmpWave;
 end
 
 -- FIXME: proper wave cleaning - doesn't work properly now!

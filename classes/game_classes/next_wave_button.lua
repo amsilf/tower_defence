@@ -8,17 +8,22 @@
 local widget = require("widget");
 
 classNextWaveButton = {};
+
 classNextWaveButton = {
 	nextWaveButton = nil,
-	pathId = nil
+	nextWaveId = nil,
+	pathId = nil,
+
+	level = nil
 };
 
 local nextWaveButton_mt = { __index = classNextWaveButton }
 
-function classNextWaveButton.new(params, pathId)
+function classNextWaveButton.new(params, level, pathId)
 	local newNextWaveButton = {
 		nextWaveButton = nil,
-		pathId = pathId
+		pathId = pathId,
+		level = level
 	};
 
 	newNextWaveButton.nextWaveButton = widget.newButton({
@@ -31,6 +36,8 @@ function classNextWaveButton.new(params, pathId)
 
 	setmetatable(newNextWaveButton, nextWaveButton_mt);
 
+	newNextWaveButton:listen();
+
 	return newNextWaveButton;
 end
 
@@ -41,9 +48,6 @@ end
 function classNextWaveButton:disable()
 	self.nextWaveButton.alpha = 0;
 	self.newNextWaveButton.isEnable = false;
-end
-
-function classNextWaveButton:pushNextWave(self, event)
 end
 
 function classNextWaveButton:setPosition(x, y)
@@ -60,18 +64,28 @@ function classNextWaveButton:getCounter()
 	return tonumber(self.nextWaveButton:getLabel());
 end
 
+function classNextWaveButton:pushNextWave(event)
+	self.level:createWaveById( self.nextWaveId );
+	self.nextWaveId = nil;
+	self.nextWaveButton:setLabel("0");
+
+	return true;
+end
+
+function classNextWaveButton:setNextWaveId(id)
+	self.nextWaveId = id;
+end
+
 function classNextWaveButton:listen()
 	currButton = self;
 
 	self.nextWaveButton.touch = function (self, event)
-		if (self.isEnable == true) then
-			currButton:pushNextWave();	
-		end
+		currButton:pushNextWave(event);	
 
 		return true;
 	end
 
-	self.nextWaveButton:addEventListener("touch");	
+	self.nextWaveButton:addEventListener("touch", self.nextWaveButton);	
 end
 
 return classNextWaveButton;
