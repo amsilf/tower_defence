@@ -151,23 +151,14 @@ local running_unit_sequence = {
 		time = 500,
 		loop_count = 0,
 		loopDirection = "forward"
-	},
-
-	{
-		name = "90_degree_run",
-		start = 1,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	}	
+	}
 };
 -- end of unit sequence
 
 -- Tower sequence
 local tower_sequence = {
 	{
-		name = "90_degree_fire",
+		name = "180_degree_fire",
 		start = 1,
 		count = 12,
 		time = 500,
@@ -176,7 +167,7 @@ local tower_sequence = {
 	},
 	
 	{
-		name = "67.5_degree_fire",
+		name = "157.5_degree_fire",
 		start = 13,
 		count = 12,
 		time = 500,
@@ -185,7 +176,7 @@ local tower_sequence = {
 	},
 
 	{
-		name = "45_degree_fire",
+		name = "135_degree_fire",
 		start = 25,
 		count = 12,
 		time = 500,
@@ -194,7 +185,7 @@ local tower_sequence = {
 	},
 
 	{
-		name = "22.5_degree_fire",
+		name = "112.5_degree_fire",
 		start = 37,
 		count = 12,
 		time = 500,
@@ -203,7 +194,7 @@ local tower_sequence = {
 	},
 
 	{
-		name = "0_degree_fire",
+		name = "90_degree_fire",
 		start = 49,
 		count = 12,
 		time = 500,
@@ -212,7 +203,7 @@ local tower_sequence = {
 	},
 
 	{
-		name = "337.5_degree_fire",
+		name = "67.5_degree_fire",
 		start = 61,
 		count = 12,
 		time = 500,
@@ -221,7 +212,7 @@ local tower_sequence = {
 	},
 
 	{
-		name = "315_degree_fire",
+		name = "45_degree_fire",
 		start = 73,
 		count = 12,
 		time = 500,
@@ -230,7 +221,7 @@ local tower_sequence = {
 	},
 
 	{
-		name = "292.5_degree_fire",
+		name = "22.5_degree_fire",
 		start = 85,
 		count = 12,
 		time = 500,
@@ -239,7 +230,7 @@ local tower_sequence = {
 	},
 
 	{
-		name = "270_degree_fire",
+		name = "0_degree_fire",
 		start = 97,
 		count = 12,
 		time = 500,
@@ -248,7 +239,7 @@ local tower_sequence = {
 	},
 
 	{
-		name = "247.5_degree_fire",
+		name = "337.5_degree_fire",
 		start = 109,
 		count = 12,
 		time = 500,
@@ -257,7 +248,7 @@ local tower_sequence = {
 	},
 
 	{
-		name = "225_degree_fire",
+		name = "315_degree_fire",
 		start = 121,
 		count = 12,
 		time = 500,
@@ -266,7 +257,7 @@ local tower_sequence = {
 	},
 
 	{
-		name = "202.5_degree_fire",
+		name = "292.5_degree_fire",
 		start = 133,
 		count = 12,
 		time = 500,
@@ -275,7 +266,7 @@ local tower_sequence = {
 	},
 
 	{
-		name = "180_degree_fire",
+		name = "270_degree_fire",
 		start = 145,
 		count = 12,
 		time = 500,
@@ -284,7 +275,7 @@ local tower_sequence = {
 	},
 
 	{
-		name = "157.5_degree_fire",
+		name = "247.5_degree_fire",
 		start = 157,
 		count = 12,
 		time = 500,
@@ -293,7 +284,7 @@ local tower_sequence = {
 	},
 
 	{
-		name = "135_degree_fire",
+		name = "225_degree_fire",
 		start = 169,
 		count = 12,
 		time = 500,
@@ -302,17 +293,8 @@ local tower_sequence = {
 	},
 
 	{
-		name = "112.5_degree_fire",
+		name = "202.5_degree_fire",
 		start = 181,
-		count = 12,
-		time = 500,
-		loop_count = 0,
-		loopDirection = "forward"
-	},
-
-	{
-		name = "90_degree_fire",
-		start = 1,
 		count = 12,
 		time = 500,
 		loop_count = 0,

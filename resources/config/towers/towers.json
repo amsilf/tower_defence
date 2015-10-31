@@ -66,7 +66,9 @@
 	"turret": {
 		"type": "turret",
 		
-		"speed": 1,
+		"rate_of_fire": 1,
+		"angular_velocity": 1,
+
 		"level": "1",
 		"range": 150,
 		"price": 100,
@@ -77,8 +79,8 @@
 			"y": 100,
 
 			"tower_sheet": "resources/towers/turret_renders_set.png",
-			"tower_sheet_width": 100,
-			"tower_sheet_height": 100,
+			"tower_sheet_width": 150,
+			"tower_sheet_height": 150,
 			"tower_sheet_numframes": 192,
 
 			"range": {

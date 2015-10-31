@@ -346,7 +346,27 @@ function levelClass:buildNewTower(type, x, y)
 	table.insert(self.towers, newTower);
 end
 
-function levelClass:nearestUnitForTower(tower)
+function levelClass:getClosestUnitForTower(tower)
+	-- waves haven't been initialzed or tower already has an aim
+	if (self.waves == nil or tower.aim ~= nil) then
+		return;
+	end
+
+	local tmpUnitDist = nil;	
+	local closestUnitDist = {
+		dist = 10000,
+		unit = nil
+	};
+
+	for i, currWave in pairs(self.waves) do
+		tmpUnitDist = currWave:getClosestUnitToPoint(tower.towerGroup.x, tower.towerGroup.y);
+
+		if (closestUnitDist.dist > tmpUnitDist.dist) then
+			closestUnitDist = tmpUnitDist;
+		end
+	end
+
+	return closestUnitDist;
 end
 
 function levelClass:isUnitInTowerRange()
@@ -360,7 +380,8 @@ function levelClass:objectsMovments()
 
 	-- towers rotation
 	for i, currTower in ipairs(self.towers) do
-		currTower:calculateRotation(self.bezierTime);
+		currTower:setAim();
+		currTower:towerRotation(self.bezierTime);
 	end
 
 	-- shots

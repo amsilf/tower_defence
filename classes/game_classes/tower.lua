@@ -12,10 +12,13 @@ local towerClass = {};
 
 towerClass = {
 	towerType = nil,
-	speed = 1,
+	rateOfFire = 1,
+	angularVelocity = 1,
 	towerLevel = 1,
 	range = 150,
 	price = 100,
+
+	aim = nil,
 
 	sprite = nil,
 
@@ -32,10 +35,13 @@ local towerClass_mt = { __index = towerClass }
 function towerClass.new(type, params, level)
 	local newTower = {
 		towerType = type,
-		speed = params["speed"],
+		rateOfFire = params["rate_of_fire"],
+		angularVelocity = params["angular_velocity"],
 		towerLevel = params["level"],
 		range = params["range"],
 		price = params["price"],
+
+		aim = nil,
 
 		sprite = nil,
 
@@ -226,29 +232,31 @@ function towerClass:listen()
 	self.sprite:addEventListener("touch");
 end
 
-function towerClass:calculateRotation(tick)
-	--[[
-	-- choose closest unit
-	local closestUnit = wave[1].sprite;
-	-- 10000 - for test, must be max double
-	local minDist = 10000;
+function towerClass:setAim()
+	self.aim = self.level:getClosestUnitForTower(self);
 
-	-- NB: tower is a center of the coordinates system
-	for i, unit in ipairs(wave) do
-		local currentUnit = unit.sprite;
+	if (self.aim ~= nil and self.aim.unit == nil) then
+		self.aim = nil;
+	end
+end
 
-		local currentDist = math.sqrt( currentUnit.y * currentUnit.y + currentUnit.x * currentUnit.x );
+function towerClass:towerRotation(tick)
 
-		if ( currentDist < minDist ) then
-			minDist = currentDist;
-			closestUnit = currentUnit;
-
-			--print("Closest unit number is [ " .. i .. " ]");
-		end
+	-- wave movements haven't triggered
+	if (self.aim == nil or self.aim.unit == nil) then
+		return;
 	end
 
+	local unitX = self.aim.unit.unitGroup.x;
+	local unitY = self.aim.unit.unitGroup.y;
+
+	print("Closest unit x = [ " .. unitX .. " ], y = [ " .. unitY .. " ]");
+	print("Tower x = [ " .. self.towerGroup.x .. " ], y = [ " .. self.towerGroup.y .. " ]");
+
 	-- tower animation
-	local angelTowerUnit = math.acos( math.pow(closestUnit.x, 2) / math.sqrt( math.pow(closestUnit.x, 2) + math.pow(closestUnit.y, 2) ) );
+	-- must be calculated for different quarters
+	local angelTowerUnit = math.atan( ( unitY - self.towerGroup.x ) / ( unitY - self.towerGroup.y ) );
+	print("Angel between tower and unit [ " .. angelTowerUnit * 22.5 .. " ]");
 
 	local isTowerAnimationChanged = false;
 
@@ -259,15 +267,15 @@ function towerClass:calculateRotation(tick)
 		if (angelTowerUnit > (basicRad * i) and angelTowerUnit < (basicRad * (i + 1)) ) then
 			-- 22.5 is a basic rad in degrees
 			local movementType = (i * 22.5) .. "_degree_fire";
-			testTower.sprite:setSequence( movementType );
+			print("curr tower seq" .. (i * 22.5) .. "_degree_fire");
+			self.sprite:setSequence( movementType );
 		end
 	end
 
 	if (isTowerAnimationChanged == true) then
 		isTowerAnimationChanged = false;
-		testTower:play();
+		self.sprite:play();
 	end
-	]]--
 end
 
 return towerClass;

@@ -105,6 +105,30 @@ function waveClass:initUnits()
 	end
 end
 
+function waveClass:getClosestUnitToPoint(x, y)
+
+	local unitClosestDist = {
+		dist = 10000,
+		unit = nil
+	}
+
+	local currDist = 0;
+	for i, currUnit in pairs(self.units) do
+
+		-- FIXME: because of unproper unit delete
+		if (currUnit.unitGroup ~= nil) then
+			currDist = math.sqrt( math.pow( x - currUnit.unitGroup.x , 2) + math.pow( y - currUnit.unitGroup.y , 2) );
+
+			if (currDist < unitClosestDist.dist) then
+				unitClosestDist.dist = currDist;
+				unitClosestDist.unit = currUnit;
+			end
+		end
+	end
+
+	return unitClosestDist;
+end
+
 function waveClass:calculateWaveMovement(tick, securedZones)
 	for i, currUnit in ipairs(self.units) do
 
