@@ -239,7 +239,9 @@ function towerClass:setAim()
 		self.aim = nil;
 	end
 end
-
+--[[
+	We are assume that the tower is the coordinates center
+]]--
 function towerClass:towerRotation(tick)
 
 	-- wave movements haven't triggered
@@ -250,31 +252,50 @@ function towerClass:towerRotation(tick)
 	local unitX = self.aim.unit.unitGroup.x;
 	local unitY = self.aim.unit.unitGroup.y;
 
-	print("Closest unit x = [ " .. unitX .. " ], y = [ " .. unitY .. " ]");
-	print("Tower x = [ " .. self.towerGroup.x .. " ], y = [ " .. self.towerGroup.y .. " ]");
+	local towerX = self.towerGroup.x;
+	local towerY = self.towerGroup.y;
 
 	-- tower animation
-	-- must be calculated for different quarters
-	local angelTowerUnit = math.atan( ( unitY - self.towerGroup.x ) / ( unitY - self.towerGroup.y ) );
-	print("Angel between tower and unit [ " .. angelTowerUnit * 22.5 .. " ]");
+
+	local angelTowerUnit = 0;
+
+	-- specific way of alpha calcultion - start from 270
+
+	-- first quarter - 0 < alpha < 90
+	if (unitX > towerX and unitY < towerY) then
+		angelTowerUnit = math.atan( ( unitY - towerX ) / ( unitY - towerY ) );
+	-- second quatert - 270 < alpha < 360
+	elseif (unitX < towerX and unitY < towerY) then
+		-- 4.7 = rad (270)
+		angelTowerUnit = math.atan( ( towerY - unitY ) / ( towerX - unitX )  ) + 4.7;
+	-- third quarter - 180 alpha < 270
+	elseif(unitX < towerX and unitY > towerY) then
+		-- 3.13 = rad (180)
+		angelTowerUnit = math.atan( ( unitY - towerY ) / ( towerX - unitX ) ) + 3.14;
+	-- fourth quarter - 90 alpha < 180
+	elseif (unitX > towerX and unitY > towerY) then
+		-- 1.57 = rad (90)
+		angelTowerUnit = math.atan( ( unitY - towerY ) / ( towerX - unitX ) ) + 1.57;
+	end
+
 
 	local isTowerAnimationChanged = false;
 
 	local basicRad = 0.393;
 
 	for i = 0, 15 do
-		isAnimationChanged = true;
 		if (angelTowerUnit > (basicRad * i) and angelTowerUnit < (basicRad * (i + 1)) ) then
+			isTowerAnimationChanged = true;
+
 			-- 22.5 is a basic rad in degrees
 			local movementType = (i * 22.5) .. "_degree_fire";
-			print("curr tower seq" .. (i * 22.5) .. "_degree_fire");
 			self.sprite:setSequence( movementType );
 		end
 	end
 
 	if (isTowerAnimationChanged == true) then
-		isTowerAnimationChanged = false;
 		self.sprite:play();
+		isTowerAnimationChanged = false;
 	end
 end
 

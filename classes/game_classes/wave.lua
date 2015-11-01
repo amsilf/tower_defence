@@ -88,6 +88,8 @@ function waveClass:initUnits()
 	local currTimeShift = nil;
 	for i = 1, self.numUnits do
 
+		units_parameters["id"] = i;
+
 		currTimeShift = ( 1 / self.numUnits ) * i * 0.01;
 		tmpUnit = unitClass.new(units_parameters, currTimeShift);
 

@@ -8,6 +8,7 @@ local sprites_sequences = require("classes.game_classes.objects_sequences");
 
 local unitClass = {};
 unitClass = {
+	id = nil,
 	sprite = nil,
 	unitGroup = nil,
 	healthBar = nil,
@@ -29,6 +30,7 @@ local unitClass_mt = { __index = unitClass }
 -- global functions
 function unitClass.new(params, timeShift)
 	local newUnit = {
+		id = params["id"],
 		sprite = nil,
 		unitGroup = nil,
 		healthBar = nil,
