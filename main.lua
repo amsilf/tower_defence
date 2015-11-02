@@ -4,9 +4,13 @@
 --
 -----------------------------------------------------------------------------------------
 
+local physics = require("physics");
+
 -- NB: uncomment to enable GUI
 --local composer = require("composer");
 --composer.gotoScene("scenes.main_menu", "zoomInOutFade");
+
+physics.start();
 
 display.setStatusBar( display.HiddenStatusBar );
 

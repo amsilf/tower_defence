@@ -4,6 +4,8 @@
 --
 -----------------------------------------------------------------------------------------
 
+local physics = require("physics");
+
 local unitClass = require("classes.game_classes.unit");
 
 local waveClass = {};
@@ -102,6 +104,10 @@ function waveClass:initUnits()
 		if (i % self.unitsPerRow == 0) then
 			row_number = row_number + 1;
 		end
+
+		-- add as physics body
+		-- kinematic - because interact only with bullets which are dynamics
+		physics.addBody(tmpUnit.sprite, "kinematic", { friction=0.5, bounce=0.3 });
 
 		table.insert(self.units, tmpUnit);
 	end
