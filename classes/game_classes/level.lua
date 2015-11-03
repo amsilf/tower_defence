@@ -11,8 +11,10 @@ local blankTowerClass = require("classes.game_classes.blank_tower");
 local resourcesClass = require("classes.game_classes.resources");
 local towerClass = require("classes.game_classes.tower");
 local waveClass = require("classes.game_classes.wave");
-local securedZoneClass = require("classes.game_classes.secured_zone");
 
+local bulletsPoolClass = require("classes.game_classes.bullets_pool");
+
+local securedZoneClass = require("classes.game_classes.secured_zone");
 local newWaveButtonClass = require("classes.game_classes.next_wave_button");
 
 local levelClass = {};
@@ -159,6 +161,7 @@ function levelClass:timer(event)
 
 	table.sort(levelWaves, waveClass.compareWavesByTime);
 
+	-- wave movments
 	for i, currWave in pairs(levelWaves) do
 		if (currWave["abs_time"] == self.absTime) then
 			local newWave = self:createWave(currWave, self.levelConfig["static_units_conf"], self.levelConfig["params"]["paths"]);
@@ -186,6 +189,11 @@ function levelClass:timer(event)
 				currButton:updateTime(currWave["abs_time"] - self.absTime);
 			end
 		end
+	end
+
+	-- towers shots
+	for i, currTower in pairs(self.towers) do
+		currTower:checkAndDoShot(self.absTime);
 	end
 
 	self.absTime = self.absTime + 1;
@@ -310,6 +318,10 @@ function levelClass:sellTower(tower, type, level)
 	end
 end
 
+function levelClass:doTowerShot(tower)
+	bulletsPoolClass:shot(tower);
+end
+
 function levelClass:putBlankTower(x, y)
 	local tmpBlankTower = blankTowerClass.new(self.levelConfig["static_towers_conf"]["blank_tower"], self);
 
@@ -367,9 +379,6 @@ function levelClass:getClosestUnitForTower(tower)
 	end
 
 	return closestUnitDist;
-end
-
-function levelClass:isUnitInTowerRange()
 end
 
 function levelClass:objectsMovments()

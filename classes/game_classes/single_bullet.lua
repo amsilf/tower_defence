@@ -30,6 +30,8 @@ function singleBulletClas.new(x, y)
 		damage = 10
 	};
 
+	print("new bullet");
+
 	newBullet.bulletObject = display.newCircle( 100, 100, 10 );
 	physics.addBody(newBullet.bulletObject, "dynamic", { radius=10 });
 

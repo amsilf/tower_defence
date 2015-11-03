@@ -20,6 +20,8 @@ towerClass = {
 
 	aim = nil,
 
+	nextShotTime = 0,
+
 	sprite = nil,
 
 	level = nil,
@@ -239,6 +241,18 @@ function towerClass:setAim()
 		self.aim = nil;
 	end
 end
+
+function towerClass:checkAndDoShot(tick)
+	if (self.nextShotTime == 0) then
+		self.nextShotTime = tick + self.rateOfFire;
+	end
+
+	if (self.nextShotTime - tick == 0) then
+		self.level:doTowerShot(self);
+		self.shotDelay = 0;
+	end
+end
+
 --[[
 	We are assume that the tower is the coordinates center
 ]]--

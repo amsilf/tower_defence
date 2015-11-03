@@ -11,6 +11,7 @@ local physics = require("physics");
 --composer.gotoScene("scenes.main_menu", "zoomInOutFade");
 
 physics.start();
+physics.setGravity(0, 0);
 
 display.setStatusBar( display.HiddenStatusBar );
 
