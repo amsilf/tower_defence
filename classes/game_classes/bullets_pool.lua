@@ -13,16 +13,37 @@ bulletsPoolClass = {
 };
 
 function bulletsPoolClass:shot(tower)
-	local newBullet = singleBulletClass.new();
+	if (tower.aim == nil or tower.aim.unit == nil) then
+		return;
+	end
 
-	-- FIXME: for test
-	newBullet.bulletObject.x = 100;
-	newBullet.bulletObject.x = 100;
+	local towerX = tower.towerGroup.x;
+	local towerY = tower.towerGroup.y;
+
+	local currLinearVelocity = self:calculateLinearVelocity(tower.aim, towerX, towerY);
+
+	local newBullet = singleBulletClass.new(towerX, towerY);
+
+	newBullet:setAim(tower.aim);
+
+	newBullet.bulletObject:setLinearVelocity(currLinearVelocity.x * newBullet.speed, currLinearVelocity.y * newBullet.speed);
 
 	table.insert(self.bullets, newBullet);
 end
 
-function bulletsPoolClass:moveBullets()
+function bulletsPoolClass:calculateLinearVelocity(aim, currX, currY)
+	local aimX = aim.unit.unitGroup.x;
+	local aimY = aim.unit.unitGroup.y;
+
+	local deltaX = aimX - currX;
+	local deltaY = aimY - currY;
+
+	local normDeltaX = deltaX / math.sqrt(math.pow(deltaX, 2) + math.pow(deltaY, 2));
+	local normDeltaY = deltaY / math.sqrt(math.pow(deltaX, 2) + math.pow(deltaY, 2));
+
+	return { x = normDeltaX, y = normDeltaY };
 end
 
 return bulletsPoolClass;
+
+

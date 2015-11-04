@@ -6,11 +6,15 @@
 
 local physics = require("physics");
 
-singleBulletClas = {};
+singleBulletClass = {};
 
-singleBulletClas = {
+singleBulletClass = {
 	x = nil,
 	y = nil,
+
+	aim = nil,
+
+	speed = 100,
 
 	bulletObject = nil,
 
@@ -18,32 +22,40 @@ singleBulletClas = {
 
 };
 
-local singleBulletClas_mt = { __index = singleBulletClas }
+local singleBulletClass_mt = { __index = singleBulletClass }
 
-function singleBulletClas.new(x, y)
+function singleBulletClass.new(x, y)
 	local newBullet = {
 		x = 0,
 		y = 0,
+
+		aim = nil,
+
+		speed = 100,
 
 		bulletObject = nil,
 
 		damage = 10
 	};
 
-	print("new bullet");
-
-	newBullet.bulletObject = display.newCircle( 100, 100, 10 );
+	newBullet.bulletObject = display.newCircle( 10, 10, 10 );
 	physics.addBody(newBullet.bulletObject, "dynamic", { radius=10 });
 
 	newBullet.bulletObject.gravityScale = 0;
 
 	newBullet.bulletObject.isBullet = true;
 
-	newBullet.bulletObject:setLinearVelocity( 800, 0);
+	newBullet.bulletObject.x = x;
+	newBullet.bulletObject.y = y;
 
-	setmetatable(newBullet, singleBulletClas_mt);
+	setmetatable(newBullet, singleBulletClass_mt);
 
 	return newBullet;
 end
 
-return singleBulletClas;
+function singleBulletClass:setAim(aim)
+	self.aim = aim;
+end
+
+return singleBulletClass;
+

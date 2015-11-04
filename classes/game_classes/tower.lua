@@ -13,7 +13,6 @@ local towerClass = {};
 towerClass = {
 	towerType = nil,
 	rateOfFire = 1,
-	angularVelocity = 1,
 	towerLevel = 1,
 	range = 150,
 	price = 100,
@@ -38,7 +37,6 @@ function towerClass.new(type, params, level)
 	local newTower = {
 		towerType = type,
 		rateOfFire = params["rate_of_fire"],
-		angularVelocity = params["angular_velocity"],
 		towerLevel = params["level"],
 		range = params["range"],
 		price = params["price"],
@@ -244,12 +242,14 @@ end
 
 function towerClass:checkAndDoShot(tick)
 	if (self.nextShotTime == 0) then
+		print("next bullet [ " .. self.rateOfFire .. " ], tick [ " .. tick .. " ]");
 		self.nextShotTime = tick + self.rateOfFire;
 	end
 
-	if (self.nextShotTime - tick == 0) then
+	if (self.nextShotTime - tick < 0) then
+		print("bullet time [ " .. self.nextShotTime .. " ], tick [ " .. tick .. " ]");
 		self.level:doTowerShot(self);
-		self.shotDelay = 0;
+		self.nextShotTime = 0;
 	end
 end
 
