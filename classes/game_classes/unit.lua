@@ -50,6 +50,7 @@ function unitClass.new(params, timeShift)
 
 	-- FIXME revise calls and pass parameters
 	newUnit.sprite = initUnitSprite("mariner");
+	newUnit.sprite["id"] = newUnit.id;
 
 	newUnit.unitGroup = display.newGroup();
 

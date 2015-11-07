@@ -41,6 +41,10 @@ function singleBulletClass.new(x, y)
 	newBullet.bulletObject = display.newCircle( 10, 10, 10 );
 	physics.addBody(newBullet.bulletObject, "dynamic", { radius=10 });
 
+	-- without it collision of dynamic <-> kinematics doesn't work
+	-- http://stackoverflow.com/questions/7055103/corona-sdk-collision-detection-isnt-working
+	newBullet.bulletObject.isSensor = true;
+
 	newBullet.bulletObject.gravityScale = 0;
 
 	newBullet.bulletObject.isBullet = true;

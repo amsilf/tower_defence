@@ -77,7 +77,7 @@ function waveClass:destoryWave()
 end
 
 function waveClass:initUnits()
-	units_parameters = {};
+	units_parameters = {};	
 	units_parameters["type"] = self.unitsType;
 	units_parameters["static"] = self.units_static;
 
@@ -90,7 +90,7 @@ function waveClass:initUnits()
 	local currTimeShift = nil;
 	for i = 1, self.numUnits do
 
-		units_parameters["id"] = i;
+		units_parameters["id"] = "wave_" .. self.id .. "_unit_" .. i;
 
 		currTimeShift = ( 1 / self.numUnits ) * i * 0.01;
 		tmpUnit = unitClass.new(units_parameters, currTimeShift);
@@ -107,7 +107,8 @@ function waveClass:initUnits()
 
 		-- add as physics body
 		-- kinematic - because interact only with bullets which are dynamics
-		physics.addBody(tmpUnit.sprite, "kinematic", { friction=0.5, bounce=0.3 });
+		physics.addBody(tmpUnit.sprite, "kinematic");
+		tmpUnit.sprite.gravityScale = 0;
 
 		table.insert(self.units, tmpUnit);
 	end
@@ -135,6 +136,16 @@ function waveClass:getClosestUnitToPoint(x, y)
 	end
 
 	return unitClosestDist;
+end
+
+function waveClass:handleHit(unitId, bulletParams)
+	-- FIXME overheled routine - splitted 2 times
+	local compelteUnitId = self.id .. "_" .. unitId;
+	for i, currUnit in self.units do
+		if (currUnit.id == compelteUnitId) then
+			-- decrease health and kill the unit
+		end
+	end
 end
 
 function waveClass:calculateWaveMovement(tick, securedZones)

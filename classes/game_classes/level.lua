@@ -66,7 +66,8 @@ function levelClass:readConfig(configPath)
 	self:initNextWavesButtons(nil, levelParams["paths"]);
 
 	-- init waves timer
-	timer.performWithDelay(1000, self, 0);
+	-- function - levelClass:timer
+	timer.performWithDelay(100, self, 0);
 
 	-- global listeners initialization
 	self:listen();
@@ -163,7 +164,7 @@ function levelClass:timer(event)
 
 	-- wave movments
 	for i, currWave in pairs(levelWaves) do
-		if (currWave["abs_time"] == self.absTime) then
+		if ( currWave["abs_time"] == self.absTime ) then
 			local newWave = self:createWave(currWave, self.levelConfig["static_units_conf"], self.levelConfig["params"]["paths"]);
 
 			-- faked filed to distingiush active and future waves
@@ -280,6 +281,16 @@ function levelClass:onTick()
 	end
 end
 
+local function onGlobalCollision( event )
+	if (event.phase == "ended") then
+		bulletsPoolClass:onGlobalCollision(event);
+	end
+end
+
+function levelClass:handleCollision(wave_id, unit_id, bullet_id)
+	
+end
+
 function levelClass:listen()
 	local gameField = self;
 
@@ -287,7 +298,11 @@ function levelClass:listen()
 		gameField.touch(self, event);
 	end
 
+	-- for objects reset
 	self.backgroundImage:addEventListener("touch");
+
+	-- global collisions handler
+	Runtime:addEventListener("collision", onGlobalCollision);
 end
 
 function levelClass:checkResourcesBuild(type)
