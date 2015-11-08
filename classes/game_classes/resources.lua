@@ -137,9 +137,13 @@ function resourcesClass:checkResourcesForUpgrade(type, level)
 
 end
 
+function resourcesClass:addCreditsForDestroyedUnit(type)
+	self.credits = self.credits + self.static[type]["price"];
+	self:updateCreditsLabel();
+end
+
 function resourcesClass:sellTower(type, level)
 	self.credits = self.credits + (self.static[type][level]["price"] / 2);
-
 	self:updateCreditsLabel();
 end
 

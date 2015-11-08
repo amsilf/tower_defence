@@ -93,7 +93,7 @@ function waveClass:initUnits()
 		units_parameters["id"] = "wave_" .. self.id .. "_unit_" .. i;
 
 		currTimeShift = ( 1 / self.numUnits ) * i * 0.01;
-		tmpUnit = unitClass.new(units_parameters, currTimeShift);
+		tmpUnit = unitClass.new(units_parameters, currTimeShift, self);
 
 		tmpUnit:setPosition( startEndPoints["start_x"], startEndPoints["start_y"]);
 
@@ -112,6 +112,17 @@ function waveClass:initUnits()
 
 		table.insert(self.units, tmpUnit);
 	end
+end
+
+function waveClass:destoryUnit(id)
+	for i, currUnit in self.units do
+		if (currUnit.id == id) then
+			currUnit:destroyUnit();
+			break;
+		end
+	end
+
+	self.level:unitDestroyed(self.unitsType);
 end
 
 function waveClass:getClosestUnitToPoint(x, y)
@@ -140,10 +151,10 @@ end
 
 function waveClass:handleHit(unitId, bulletParams)
 	-- FIXME overheled routine - splitted 2 times
-	local compelteUnitId = self.id .. "_" .. unitId;
+	local compelteUnitId = "wave_" .. self.id .. "_unit_" .. unitId;
 	for i, currUnit in self.units do
 		if (currUnit.id == compelteUnitId) then
-			-- decrease health and kill the unit
+
 		end
 	end
 end

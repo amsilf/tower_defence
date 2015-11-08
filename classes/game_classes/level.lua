@@ -287,8 +287,13 @@ local function onGlobalCollision( event )
 	end
 end
 
-function levelClass:handleCollision(wave_id, unit_id, bullet_id)
-	
+function levelClass:handleCollision(waveId, unitId, bulletParams)
+	for i, currWave in self.waves do
+		if (currWave.id == waveId) then
+			currWave:handleHit(unitId, bulletParams);
+			return;
+		end
+	end
 end
 
 function levelClass:listen()
@@ -394,6 +399,10 @@ function levelClass:getClosestUnitForTower(tower)
 	end
 
 	return closestUnitDist;
+end
+
+function levelClass:unitDestroyed(type)
+	resourcesClass:addCreditsForDestroyedUnit(type);
 end
 
 function levelClass:objectsMovments()

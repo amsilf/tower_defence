@@ -52,6 +52,7 @@ function bulletsPoolClass:onGlobalCollision(event)
 			end
 
 			-- FIXME: must be bullet params
+			print("wave id [ " .. splittedCompoundId[0] .. "], [ " .. splittedCompoundId[1] .. " ]");
 			self.level:handleCollision(splittedCompoundId[0], splittedCompoundId[1], nil);
 		end
 	end
@@ -76,8 +77,8 @@ end
 
 -- FIXME move to utils
 -- from http://lua-users.org/wiki/StringRecipes
-function string.starts(String,Start)
-   return string.sub(String,1,string.len(Start))==Start
+function string.starts(String, Start)
+   return string.sub(String,1,string.len(Start)) == Start
 end
 
 return bulletsPoolClass;
