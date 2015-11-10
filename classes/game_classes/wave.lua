@@ -32,7 +32,7 @@ local waveClass_mt = { __index = waveClass }
 function waveClass.new(params, level)
 	local newWave = {
 		id = params["id"],
-		unitsType = params["unitsType"],
+		unitsType = params["type"],
 		unitsPerRow = params["units_per_row"],
 		numUnits = params["num_units"],
 		absTime = params["abs_time"],
@@ -107,15 +107,16 @@ function waveClass:initUnits()
 
 		-- add as physics body
 		-- kinematic - because interact only with bullets which are dynamics
-		physics.addBody(tmpUnit.sprite, "kinematic");
-		tmpUnit.sprite.gravityScale = 0;
+		--physics.addBody(tmpUnit.sprite, "kinematic", {density=1.0, friction=1.0, bounce=0} );
+		--tmpUnit.sprite.isFixedRotation = true;
+		--tmpUnit.sprite.gravityScale = 0;
 
 		table.insert(self.units, tmpUnit);
 	end
 end
 
-function waveClass:destoryUnit(id)
-	for i, currUnit in self.units do
+function waveClass:destroyUnit(id)
+	for i, currUnit in pairs(self.units) do
 		if (currUnit.id == id) then
 			currUnit:destroyUnit();
 			break;
@@ -150,11 +151,11 @@ function waveClass:getClosestUnitToPoint(x, y)
 end
 
 function waveClass:handleHit(unitId, bulletParams)
-	-- FIXME overheled routine - splitted 2 times
 	local compelteUnitId = "wave_" .. self.id .. "_unit_" .. unitId;
-	for i, currUnit in self.units do
+	for i, currUnit in pairs(self.units) do
 		if (currUnit.id == compelteUnitId) then
-
+			-- FIXME 10 - must be a parameter
+			currUnit:decreaseHealt(10);
 		end
 	end
 end

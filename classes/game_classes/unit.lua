@@ -66,14 +66,14 @@ function unitClass.new(params, timeShift, parentWave)
 
 	-- FIXME: review number
 	-- width is 80
-	healthBar = display.newRect(-5, -45, 35, 7);
+	newUnit.healthBar = display.newRect(-5, -45, 35, 7);
 
-	healthBar:setFillColor(0, 10, 0);
+	newUnit.healthBar:setFillColor(0, 10, 0);
 
-	healthBar.strokeWidth = 0.5;
-	healthBar:setStrokeColor(0, 0, 0, .5);
+	newUnit.healthBar.strokeWidth = 0.5;
+	newUnit.healthBar:setStrokeColor(0, 0, 0, .5);
 
-	newUnit.unitGroup:insert(healthBar);
+	newUnit.unitGroup:insert(newUnit.healthBar);
 
 	setmetatable(newUnit, unitClass_mt);
 
@@ -96,7 +96,7 @@ function unitClass:decreaseHealt(value)
 	self.currHealth = self.currHealth - value;
 
 	if(self.currHealth < 0) then
-		parentWave:destroyUnit(self.id);
+		self.parentWave:destroyUnit(self.id);
 		return;
 	end
 
@@ -104,15 +104,19 @@ function unitClass:decreaseHealt(value)
 end
 
 function unitClass:updateHealthBar()
-	local currRatio = self.currHealth / self.maxHealth;
-	if ( currRatio < 0.5 ) then
-		healthBar:setFillColor(230, 245, 20);
-	elseif ( currRatio < 0.2 ) then
-		healthBar:setFillColor(10, 0, 0);
+	local currHealthPercentage = (self.maxHealth / 100) * self.currHealth;
+	if ( currHealthPercentage < 50 ) then
+		self.healthBar:setFillColor(230, 245, 20);
+	elseif ( currHealthPercentage < 20 ) then
+		self.healthBar:setFillColor(10, 0, 0);
 	end
 
+	local scaleRate = (100 - self.currHealth) / 100;
+	print("scale rate [ " .. scaleRate .. " ]");
+
 	-- FIXME 80 is the bar width, will be moved into const
-	healthBar.scale(currRatio * 80, 1);
+	local ratio = 80 / self.currHealth;
+	self.healthBar:scale(scaleRate, 1);
 end
 
 function unitClass:setPosition(x, y)

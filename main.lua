@@ -4,14 +4,15 @@
 --
 -----------------------------------------------------------------------------------------
 
-local physics = require("physics");
+--local physics = require("physics");
+--physics.setDrawMode( "hybrid" );
 
 -- NB: uncomment to enable GUI
 --local composer = require("composer");
 --composer.gotoScene("scenes.main_menu", "zoomInOutFade");
 
-physics.start();
-physics.setGravity(0, 0);
+--physics.start();
+--physics.setGravity(0, 0);
 
 display.setStatusBar( display.HiddenStatusBar );
 

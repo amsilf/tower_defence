@@ -65,6 +65,9 @@ function levelClass:readConfig(configPath)
 	-- FIXME: set up config
 	self:initNextWavesButtons(nil, levelParams["paths"]);
 
+	-- set level to bullets pool
+	bulletsPoolClass:setLevel(self);
+
 	-- init waves timer
 	-- function - levelClass:timer
 	timer.performWithDelay(100, self, 0);
@@ -281,15 +284,17 @@ function levelClass:onTick()
 	end
 end
 
+--[[
 local function onGlobalCollision( event )
 	if (event.phase == "ended") then
 		bulletsPoolClass:onGlobalCollision(event);
 	end
 end
+--]]
 
-function levelClass:handleCollision(waveId, unitId, bulletParams)
-	for i, currWave in self.waves do
-		if (currWave.id == waveId) then
+function levelClass:handleHits(waveId, unitId, bulletParams)
+	for i, currWave in pairs(self.waves) do
+		if (currWave.id == tonumber(waveId)) then
 			currWave:handleHit(unitId, bulletParams);
 			return;
 		end
@@ -307,7 +312,7 @@ function levelClass:listen()
 	self.backgroundImage:addEventListener("touch");
 
 	-- global collisions handler
-	Runtime:addEventListener("collision", onGlobalCollision);
+	--Runtime:addEventListener("collision", onGlobalCollision);
 end
 
 function levelClass:checkResourcesBuild(type)
@@ -411,13 +416,11 @@ function levelClass:objectsMovments()
 		currWave:calculateWaveMovement(self.bezierTime, path);
 	end
 
-	-- towers rotation
+	-- towers rotation and shots
 	for i, currTower in ipairs(self.towers) do
 		currTower:setAim();
 		currTower:towerRotation(self.bezierTime);
 	end
-
-	-- shots
 
 end
 

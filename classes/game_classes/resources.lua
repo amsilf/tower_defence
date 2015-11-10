@@ -138,6 +138,7 @@ function resourcesClass:checkResourcesForUpgrade(type, level)
 end
 
 function resourcesClass:addCreditsForDestroyedUnit(type)
+	print("unit type [ " .. type .. " ]")
 	self.credits = self.credits + self.static[type]["price"];
 	self:updateCreditsLabel();
 end

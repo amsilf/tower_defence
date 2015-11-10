@@ -9,6 +9,7 @@ local physics = require("physics");
 singleBulletClass = {};
 
 singleBulletClass = {
+	id = 0,
 	x = nil,
 	y = nil,
 
@@ -24,8 +25,10 @@ singleBulletClass = {
 
 local singleBulletClass_mt = { __index = singleBulletClass }
 
-function singleBulletClass.new(x, y)
+function singleBulletClass.new(x, y, id)
 	local newBullet = {
+		id = 0,
+
 		x = 0,
 		y = 0,
 
@@ -38,16 +41,17 @@ function singleBulletClass.new(x, y)
 		damage = 10
 	};
 
-	newBullet.bulletObject = display.newCircle( 10, 10, 10 );
-	physics.addBody(newBullet.bulletObject, "dynamic", { radius=10 });
+	newBullet.id = id;
 
-	-- without it collision of dynamic <-> kinematics doesn't work
-	-- http://stackoverflow.com/questions/7055103/corona-sdk-collision-detection-isnt-working
-	newBullet.bulletObject.isSensor = true;
+	newBullet.bulletObject = display.newCircle( 10, 10, 10 );
+
+	--[[]
+	physics.addBody(newBullet.bulletObject, "dynamic", { radius=10 });
 
 	newBullet.bulletObject.gravityScale = 0;
 
 	newBullet.bulletObject.isBullet = true;
+	--]]
 
 	newBullet.bulletObject.x = x;
 	newBullet.bulletObject.y = y;
@@ -55,6 +59,12 @@ function singleBulletClass.new(x, y)
 	setmetatable(newBullet, singleBulletClass_mt);
 
 	return newBullet;
+end
+
+function singleBulletClass:removeBullet()
+	if (self.bulletObject ~= nil) then
+		self.bulletObject:removeSelf();
+	end
 end
 
 function singleBulletClass:setAim(aim)
