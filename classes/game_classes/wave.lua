@@ -105,12 +105,6 @@ function waveClass:initUnits()
 			row_number = row_number + 1;
 		end
 
-		-- add as physics body
-		-- kinematic - because interact only with bullets which are dynamics
-		--physics.addBody(tmpUnit.sprite, "kinematic", {density=1.0, friction=1.0, bounce=0} );
-		--tmpUnit.sprite.isFixedRotation = true;
-		--tmpUnit.sprite.gravityScale = 0;
-
 		table.insert(self.units, tmpUnit);
 	end
 end

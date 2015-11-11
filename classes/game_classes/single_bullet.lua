@@ -45,14 +45,6 @@ function singleBulletClass.new(x, y, id)
 
 	newBullet.bulletObject = display.newCircle( 10, 10, 10 );
 
-	--[[]
-	physics.addBody(newBullet.bulletObject, "dynamic", { radius=10 });
-
-	newBullet.bulletObject.gravityScale = 0;
-
-	newBullet.bulletObject.isBullet = true;
-	--]]
-
 	newBullet.bulletObject.x = x;
 	newBullet.bulletObject.y = y;
 

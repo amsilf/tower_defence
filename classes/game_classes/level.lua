@@ -66,7 +66,8 @@ function levelClass:readConfig(configPath)
 	self:initNextWavesButtons(nil, levelParams["paths"]);
 
 	-- set level to bullets pool
-	bulletsPoolClass:setLevel(self);
+	-- TODO think about passing level
+	bulletsPoolClass.setLevel(self);
 
 	-- init waves timer
 	-- function - levelClass:timer
@@ -284,13 +285,6 @@ function levelClass:onTick()
 	end
 end
 
---[[
-local function onGlobalCollision( event )
-	if (event.phase == "ended") then
-		bulletsPoolClass:onGlobalCollision(event);
-	end
-end
---]]
 
 function levelClass:handleHits(waveId, unitId, bulletParams)
 	for i, currWave in pairs(self.waves) do
@@ -310,9 +304,6 @@ function levelClass:listen()
 
 	-- for objects reset
 	self.backgroundImage:addEventListener("touch");
-
-	-- global collisions handler
-	--Runtime:addEventListener("collision", onGlobalCollision);
 end
 
 function levelClass:checkResourcesBuild(type)
