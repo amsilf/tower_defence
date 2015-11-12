@@ -39,7 +39,6 @@ function bulletsPoolClass:shot(tower)
 
 	transition.to(newBullet.bulletObject, {time = 100, x = tower.aim.unit.unitGroup.x, y = tower.aim.unit.unitGroup.y, 
 		onComplete = bulletsPoolClass.calculateHit });
-	--	onComplete = self:calculateHit(newBullet, tower.aim.unit["id"])});
 end
 
 function bulletsPoolClass.calculateHit( obj )

@@ -241,15 +241,31 @@ function towerClass:setAim()
 end
 
 function towerClass:checkAndDoShot(tick)
-	if (self.nextShotTime == 0) then
-		-- print("next bullet [ " .. self.rateOfFire .. " ], tick [ " .. tick .. " ]");
-		self.nextShotTime = tick + self.rateOfFire;
+
+	-- aim haven't chosen
+	if (self.aim == nil or self.aim.unit == nil) then
+		return;
 	end
 
-	if (self.nextShotTime - tick < 0) then
-		-- print("bullet time [ " .. self.nextShotTime .. " ], tick [ " .. tick .. " ]");
-		self.level:doTowerShot(self);
-		self.nextShotTime = 0;
+	local aimX = self.aim.unit.unitGroup.x;
+	local aimY = self.aim.unit.unitGroup.y;
+
+	-- tower is the circle center
+	local towerX = self.towerGroup.x;
+	local towerY = self.towerGroup.y;
+
+	-- if aim in the tower range
+	local pointsInRange = math.sqrt( math.pow(aimX - towerX, 2) + math.pow(aimY - towerY, 2) );
+
+	if (pointsInRange <= self.range) then
+		if (self.nextShotTime == 0) then
+			self.nextShotTime = tick + self.rateOfFire;
+		end
+
+		if (self.nextShotTime - tick < 0) then
+			self.level:doTowerShot(self);
+			self.nextShotTime = 0;
+		end
 	end
 end
 

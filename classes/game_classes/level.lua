@@ -47,7 +47,6 @@ function levelClass:readConfig(configPath)
 	self:initMainDisplay( levelParams["background"] );
 
 	-- init resources
-	-- FIMME - 10 must be real waves number
 	self:initResources( levelParams["level_resources"], self.levelConfig["static_resources_conf"]["resources"], 
 		-- number of waves
 		#self.levelConfig["waves_conf"]["waves"] );
@@ -66,12 +65,11 @@ function levelClass:readConfig(configPath)
 	self:initNextWavesButtons(nil, levelParams["paths"]);
 
 	-- set level to bullets pool
-	-- TODO think about passing level
 	bulletsPoolClass.setLevel(self);
 
 	-- init waves timer
 	-- function - levelClass:timer
-	timer.performWithDelay(100, self, 0);
+	timer.performWithDelay(10, self, 0);
 
 	-- global listeners initialization
 	self:listen();
@@ -365,6 +363,14 @@ end
 
 function levelClass:buildNewTower(type, x, y)
 	local static_towers_conf = self.levelConfig["static_towers_conf"][type];
+
+	for i, conf in pairs(self.levelConfig["static_towers_conf"]) do
+		print(i);
+	end
+
+	print("tower type [ " .. type .. " ]");
+	print("type - " .. static_towers_conf["type"]);
+
 	local newTower = towerClass.new(type, static_towers_conf, self);
 
 	resourcesClass:buildOrUpgradeTower(type, "1");

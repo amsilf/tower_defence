@@ -1,4 +1,4 @@
------------------------------------------------------------------------------------------
+	-----------------------------------------------------------------------------------------
 --
 -- single_bullet.lua
 --
@@ -43,7 +43,13 @@ function singleBulletClass.new(x, y, id)
 
 	newBullet.id = id;
 
-	newBullet.bulletObject = display.newCircle( 10, 10, 10 );
+	newBullet.bulletObject = display.newCircle(10, 10, 10);
+
+	newBullet.bulletObject.fill.effect = "generator.sunbeams";
+	newBullet.bulletObject.fill.effect.posX = 0.5;
+	newBullet.bulletObject.fill.effect.posY = 0.5;
+	newBullet.bulletObject.fill.effect.aspectRatio = 1;
+	newBullet.bulletObject.fill.effect.seed = 0;
 
 	newBullet.bulletObject.x = x;
 	newBullet.bulletObject.y = y;
