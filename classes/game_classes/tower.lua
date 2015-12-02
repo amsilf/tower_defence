@@ -243,7 +243,7 @@ end
 function towerClass:checkAndDoShot(tick)
 
 	-- aim haven't chosen
-	if (self.aim == nil or self.aim.unit == nil) then
+	if (self.aim == nil or self.aim.unit == nil or self.aim.unit.unitGroup == nil) then
 		return;
 	end
 

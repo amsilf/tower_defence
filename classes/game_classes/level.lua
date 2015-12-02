@@ -17,13 +17,16 @@ local bulletsPoolClass = require("classes.game_classes.bullets_pool");
 local securedZoneClass = require("classes.game_classes.secured_zone");
 local newWaveButtonClass = require("classes.game_classes.next_wave_button");
 
+local dialogsClass = require("classes.gui.dialogs");
+
 local levelClass = {};
 
+-- 
 levelClass = {
 	towers = {},
 	blankTowers = {},
 	waves = {},
-	dialogs = {},
+	dialog = nil,
 
 	securedZones = {},
 
@@ -64,12 +67,11 @@ function levelClass:readConfig(configPath)
 	-- FIXME: set up config
 	self:initNextWavesButtons(nil, levelParams["paths"]);
 
+	-- game dialogs initialization
+	self:initDialog( self.levelConfig["dialogs_conf"] );
+
 	-- set level to bullets pool
 	bulletsPoolClass.setLevel(self);
-
-	-- init waves timer
-	-- function - levelClass:timer
-	timer.performWithDelay(10, self, 0);
 
 	-- global listeners initialization
 	self:listen();
@@ -122,6 +124,10 @@ function levelClass:initTowers(towersConfig, staticTowersConfig)
 
 		table.insert(self.towers, tmpTower);
 	end
+end
+
+function levelClass:initDialog(dialogsConfig)
+	self.dialog = dialogsClass.new(dialogsConfig["briefing"], self);
 end
 
 function levelClass:initSecuredZone(zonesConfig)
@@ -278,6 +284,7 @@ function levelClass:onTick()
 	-- TODO: thinks about proper timing implementation
 	-- bezier constant
 	-- FIXME: advanced threshold calculation
+	-- FIXME: stop / start time mechanism
 	if (self.bezierTime > 1.2) then
 		self.bezierTime = 0;
 	end
@@ -419,6 +426,14 @@ function levelClass:objectsMovments()
 		currTower:towerRotation(self.bezierTime);
 	end
 
+end
+
+function levelClass:startTimer()
+	timer.performWithDelay(10, self, 0);
+end
+
+function levelClass:stopTimer()
+	timer.pause();
 end
 
 return levelClass;

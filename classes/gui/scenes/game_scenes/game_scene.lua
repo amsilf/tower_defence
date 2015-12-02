@@ -1,11 +1,10 @@
 -----------------------------------------------------------------------------------------
 --
--- saved_sessions.lua
+-- game_scene.lua
 --
 -----------------------------------------------------------------------------------------
 
 -- global imports
-local widget = require("widget")
 local composer = require("composer")
 
 local scene = composer.newScene()
@@ -18,56 +17,17 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 
-local function onFirstSaveButtonRelease()
-    composer.gotoScene("classes.gui.scenes.game_scenes.game_scene", "zoomInOutFade");
-    return true;
-end
-
-local function onSecondSaveButtonRelease()
-end
-
-local function onThirdSaveButtonRelease()
-end
-
 -- "scene:create()"
 function scene:create( event )
+	local level = require("classes.game_classes.level");
 
-    local sceneGroup = self.view
-    firstSaveButton = widget.newButton({
-        label="Save - 1",
-        width=200, height=100,
-        fontSize=40,
-        onRelease = onFirstSaveButtonRelease
-        });
+	level:readConfig("resources/config/maps/02_saint_petersburg.json");
 
-    secondSaveButton = widget.newButton({
-        label="Save - 2",
-        width=200, height=100,
-        fontSize=40,
-        onRelease=onSecondSaveButtonRelease
-        });
+	local function onTick(self, event)
+		level:onTick();
+	end
 
-    thirdSaveButton = widget.newButton({
-        label="Save - 3",
-        width=200, height=100,
-        fontSize=40,
-        onRelease=onThirdSaveButtonRelease
-        });
-
-
-    firstSaveButton.x = display.contentWidth * 0.5;
-    firstSaveButton.y = display.contentHeight * 0.5 - 140;
-
-    secondSaveButton.x = display.contentWidth * 0.5;
-    secondSaveButton.y = display.contentHeight * 0.5 - 20;
-
-    thirdSaveButton.x = display.contentWidth * 0.5;
-    thirdSaveButton.y = display.contentHeight * 0.5 + 100;
-
-    sceneGroup:insert(firstSaveButton);
-    sceneGroup:insert(secondSaveButton);
-
-    sceneGroup:insert(thirdSaveButton);
+	Runtime:addEventListener( "enterFrame", onTick );
 end
 
 -- "scene:show()"
@@ -124,3 +84,4 @@ scene:addEventListener( "destroy", scene )
 -- -------------------------------------------------------------------------------
 
 return scene
+

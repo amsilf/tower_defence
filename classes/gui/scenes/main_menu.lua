@@ -19,17 +19,17 @@ local scene = composer.newScene();
 -- -------------------------------------------------------------------------------
 
 local function onPlayButtonRelease()
-    composer.gotoScene("scenes.saved_sessions_menu", "zoomInOutFade");
+    composer.gotoScene("classes.gui.scenes.saved_sessions_menu", "zoomInOutFade");
     return true;
 end
 
 local function onSettingsButtonRelese()
-    composer.gotoScene("scenes.settings_menu", "zoomInOutFade");
+    composer.gotoScene("classes.gui.scenes.settings_menu", "zoomInOutFade");
     return true;
 end
 
 local function onCreditsButtonRelease()
-    composer.gotoScene("scenes.credits_menu", "zoomInOutFade");
+    composer.gotoScene("classes.gui.scenes.credits_menu", "zoomInOutFade");
     return true;
 end
 

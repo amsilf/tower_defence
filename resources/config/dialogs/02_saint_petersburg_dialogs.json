@@ -5,6 +5,42 @@
 		"trigger": "on_start",
 		"image": "resources/briefing/02_saint_petersburg_briefing.png",
 		"title": "Red Alert! Nucler strike!",
-		"text": "TO BE DONE"
+		"text": "Внимание, лейтенант! Красная тревога! База была атакована неизвестными формированиями, в центре Мурманска сработал тактический ядерный заряд - город в руинах, весь командный состав развеян над Северным морем. Остались лишь мы с вами, нужно срочно организовать оборону базы, не дать врагу добраться до секретных документов и нашего ядреного арсенала. К оружию!",
+
+		"gui": {
+			"main_window": {
+				"x": 500,
+				"y": 400,
+				"width": 900,
+				"height": 600,
+				"round_radius": 50
+			},
+
+			"text_area": {	
+				"x": 650,
+				"y": 400,
+				"width": 500,
+				"height": 500,
+				"font_size": 30,
+				"align": "left"
+			},
+
+			"image_box": {
+
+			},
+
+			"ok_button": {
+				"lavel": "OK",
+				"font_size": 30,
+				"left": 400,
+				"top": 630
+			}
+		}
+	},
+
+	"on_third_wave": {
+		"trigger": "wave_3"
 	}
+
 }
+

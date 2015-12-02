@@ -1,58 +1,96 @@
 -----------------------------------------------------------------------------------------
 --
--- gui_dialogs.lua
+-- dialogs.lua
 --
 -----------------------------------------------------------------------------------------
-local function scrollListener( event )
-    local phase = event.phase
 
-    if ( phase == "began" ) then print( "Scroll view was touched" )
-    elseif ( phase == "moved" ) then print( "Scroll view was moved" )
-    elseif ( phase == "ended" ) then print( "Scroll view was released" )
-    end
+local widget = require("widget");
 
-    -- In the event a scroll limit is reached...
-    if ( event.limitReached ) then
-        if ( event.direction == "up" ) then print( "Reached top limit" )
-        elseif ( event.direction == "down" ) then print( "Reached bottom limit" )
-        elseif ( event.direction == "left" ) then print( "Reached left limit" )
-        elseif ( event.direction == "right" ) then print( "Reached right limit" )
-        end
-    end
+dialogsClass = {};
 
-    return true
-end
+dialogsClass = {
+	trigger = nil,
+	time = nil,
+	title = nil,
+	text = nil,
 
-local briefingDialog = widget.newScrollView
-{
-	top = 100,
-	left = 10,
-	width = 1000,
-	height = 600,
-	scrollWidth = 600,
-    scrollHeight = 800,
-    listener = scrollListener
+	titleText = nil,
+
+	image = nil,
+
+	level = nil,
+
+	dialogGroup = nil,
+	dialogTextArea = nil,
+	dialogOkButton = nil,
+	dialogBorder = nil
 }
 
-local function handleButtonEvent( event )
-    if ( "ended" == event.phase ) then
-        print( "Button was pressed and released" )
-    end
+local dialogsClass_mt = { __index = dialogsClass }
+
+function dialogsClass.new(params, level)
+	local newDialog = {
+		trigger = params["trigger"],
+		time = params["time"],
+		title = params["title"],
+
+		image = params["image"],
+	};
+
+	newDialog.level = level;
+
+	newDialog.dialogGroup = display.newGroup();
+
+	newDialog.dialogBorder = display.newRoundedRect(500, 400, 900, 600, 50);
+	newDialog.dialogBorder:setFillColor(0.2);
+	newDialog.dialogBorder.alpha = 0.9;
+
+	newDialog.dialogTextArea = display.newText({
+		text = params["text"],
+		x = 650,
+		y = 400,
+		width = 500,
+		height = 500,
+		fontSize = 30,
+		align = "left"
+		});
+
+	newDialog.dialogOkButton = widget.newButton( {
+		label = "OK",
+		fontSize = 32,
+		left = 400,
+		top = 630
+		} );
+
+	newDialog.dialogGroup:insert(newDialog.dialogBorder);
+	newDialog.dialogGroup:insert(newDialog.dialogOkButton);
+
+	setmetatable(newDialog, dialogsClass_mt);
+
+	newDialog:listen();
+
+	return newDialog;
 end
 
--- Create the widget
-local brief_ok = widget.newButton
-{
-    left = 430,
-    top = 500,
-    id = "brief_ok",
-    label = "Ok",
-    onEvent = handleButtonEvent
-}
+function dialogsClass:okPressed(event)
+	self.level:startTimer();
+	self:hideDialog();
+end
 
-local brief_text = display.newText("Brief text test", 200, 200, native.systemFont, 60);
+function dialogsClass:hideDialog()
+end
 
-brief_text:setFillColor(0, 0, 0);
+function dialogsClass:listen()
+	local currDialog = self;
 
-briefingDialog:insert(brief_text);
-briefingDialog:insert(brief_ok);
+	self.dialogOkButton.touch = function(self, event)
+		currDialog:okPressed(event);
+		return true;
+	end
+
+	self.dialogOkButton:addEventListener("touch", self.dialogOkButton);
+end
+
+return dialogsClass;
+
+
