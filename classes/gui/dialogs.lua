@@ -14,9 +14,8 @@ dialogsClass = {
 	title = nil,
 	text = nil,
 
-	titleText = nil,
-
-	image = nil,
+	speakerImage = nil,
+	speakerTitle = nil,
 
 	level = nil,
 
@@ -45,6 +44,16 @@ function dialogsClass.new(params, level)
 	newDialog.dialogBorder:setFillColor(0.2);
 	newDialog.dialogBorder.alpha = 0.9;
 
+	newDialog.speakerImage = display.newImage("resources/icons/speaker_icon.png", 200, 200);
+	newDialog.speakerTitle = display.newText({
+		text = "title",
+		x = 300,
+		y = 300,
+		width = 100,
+		height = 100,
+		fontSize = 30
+		});
+
 	newDialog.dialogTextArea = display.newText({
 		text = params["text"],
 		x = 650,
@@ -65,6 +74,7 @@ function dialogsClass.new(params, level)
 	-- order is important, last element will shown on top of others
 	newDialog.dialogGroup:insert( newDialog.dialogBorder );
 	newDialog.dialogGroup:insert( newDialog.dialogOkButton );
+	newDialog.dialogGroup:insert( newDialog.speakerImage );
 	newDialog.dialogGroup:insert( newDialog.dialogTextArea );
 
 	setmetatable(newDialog, dialogsClass_mt);
