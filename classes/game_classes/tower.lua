@@ -83,7 +83,7 @@ function towerClass.new(type, params, level)
 			height = btnUpgradeParams["height"],
 			left = btnUpgradeParams["left"],
 			top = btnUpgradeParams["top"],
-			isEnable = btnUpgradeParams["isEnable"],
+			isEnabled = btnUpgradeParams["isEnabled"],
 			defaultFile = btnUpgradeParams["defaultFile"]
 		});
 
@@ -97,7 +97,7 @@ function towerClass.new(type, params, level)
 			height = btnSellParams["height"],
 			left = btnSellParams["left"],
 			top = btnSellParams["top"],
-			isEnable = btnSellParams["isEnable"],
+			isEnabled = btnSellParams["isEnabled"],
 			defaultFile = btnSellParams["defaultFile"]
 		});
 
@@ -134,10 +134,10 @@ function towerClass:hideMenu()
 	self.towerRange.alpha = 0;
 
 	self.upgradeButton.alpha = 0;
-	self.upgradeButton.isEnable = false;
+	self.upgradeButton:setEnabled(false);
 
 	self.sellButton.alpha = 0;
-	self.sellButton.isEnable = false;	
+	self.sellButton:setEnabled(false);	
 end
 
 function towerClass:touch(event)
@@ -145,14 +145,14 @@ function towerClass:touch(event)
 
 	if ( self.level:checkResourcesUpgrade(self.towerType, tostring(tonumber(self.towerLevel) + 1)) == true ) then
 		self.upgradeButton.alpha = 1;
-		self.upgradeButton.isEnable = true;
+		self.upgradeButton:setEnabled(true);
 	else
 		self.upgradeButton.alpha = 0.5;
-		self.upgradeButton.isEnable = false;		
+		self.upgradeButton:setEnabled(false);		
 	end
 
 	self.sellButton.alpha = 1;
-	self.sellButton.isEnable = true;
+	self.sellButton:setEnabled(true);
 end
 
 function towerClass:setTowerPosition(x, y)
@@ -213,16 +213,12 @@ function towerClass:listen()
 	end
 
 	self.upgradeButton.touch = function (self, event)
-		if (self.isEnable == true) then
-			tower:upgrade(event);
-		end
-
+		tower:upgrade(event);
 		return true;
 	end
 
 	self.sellButton.touch = function (self, event)
 		tower:sell(event);
-
 		return true;
 	end
 

@@ -13,7 +13,9 @@
 				"y": 400,
 				"width": 900,
 				"height": 600,
-				"round_radius": 50
+				"round_radius": 50,
+				"fill_color": 0.2,
+				"alpha": 0.9
 			},
 
 			"text_area": {	

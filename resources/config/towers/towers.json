@@ -30,7 +30,7 @@
 				"height": 70,
 				"left": -25,
 				"top": 70,
-				"isEnable": "false",
+				"isEnabledd": "false",
 				"image": "resources/icons/turret_icon.png"
 			},
 
@@ -39,7 +39,7 @@
 				"height": 50,
 				"left": -125,
 				"top": -25,
-				"isEnable": "false",
+				"isEnabledd": "false",
 				"image": "resources/icons/laser_icon.png"
 			},
 
@@ -48,7 +48,7 @@
 				"height": 50,
 				"left": -25,
 				"top": -120,
-				"isEnable": "false",
+				"isEnabledd": "false",
 				"image": "resources/icons/rocket_icon.png"
 			},
 
@@ -57,7 +57,7 @@
 				"height": 50,
 				"left": 75,
 				"top": -25,
-				"isEnable": "false",
+				"isEnabledd": "false",
 				"image": "resources/icons/plasma_icon.png"
 			}
 		}
@@ -102,7 +102,7 @@
 				"left": -20,
 				"top": -140,
 				"fontSize": 25,
-				"isEnable": false,
+				"isEnabledd": false,
 				"alpha": 0,
 				"defaultFile": "resources/icons/upgrade_icon.png"
 			},
@@ -112,7 +112,7 @@
 				"height": 70,
 				"left": 10,
 				"top": 110,
-				"isEnable": false,
+				"isEnabledd": false,
 				"alpha": 0,
 				"defaultFile": "resources/icons/sell_icon.png"
 			}
@@ -158,7 +158,7 @@
 				"left": -20,
 				"top": -140,
 				"fontSize": 25,
-				"isEnable": false,
+				"isEnabled": false,
 				"alpha": 0,
 				"defaultFile": "resources/icons/upgrade_icon.png"
 			},
@@ -168,7 +168,7 @@
 				"height": 70,
 				"left": 10,
 				"top": 110,
-				"isEnable": false,
+				"isEnabled": false,
 				"alpha": 0,
 				"defaultFile": "resources/icons/sell_icon.png"
 			}
@@ -214,7 +214,7 @@
 				"left": -20,
 				"top": -140,
 				"fontSize": 25,
-				"isEnable": false,
+				"isEnabled": false,
 				"alpha": 0,
 				"defaultFile": "resources/icons/upgrade_icon.png"
 			},
@@ -224,7 +224,7 @@
 				"height": 70,
 				"left": 10,
 				"top": 110,
-				"isEnable": false,
+				"isEnabled": false,
 				"alpha": 0,
 				"defaultFile": "resources/icons/sell_icon.png"
 			}
@@ -271,7 +271,7 @@
 				"left": -20,
 				"top": -140,
 				"fontSize": 25,
-				"isEnable": false,
+				"isEnabled": false,
 				"alpha": 0,
 				"defaultFile": "resources/icons/upgrade_icon.png"
 			},
@@ -281,7 +281,7 @@
 				"height": 70,
 				"left": 10,
 				"top": 110,
-				"isEnable": false,
+				"isEnabled": false,
 				"alpha": 0,
 				"defaultFile": "resources/icons/sell_icon.png"
 			}

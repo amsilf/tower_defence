@@ -62,8 +62,10 @@ function dialogsClass.new(params, level)
 		top = 630
 		} );
 
-	newDialog.dialogGroup:insert(newDialog.dialogBorder);
-	newDialog.dialogGroup:insert(newDialog.dialogOkButton);
+	-- order is important, last element will shown on top of others
+	newDialog.dialogGroup:insert( newDialog.dialogBorder );
+	newDialog.dialogGroup:insert( newDialog.dialogOkButton );
+	newDialog.dialogGroup:insert( newDialog.dialogTextArea );
 
 	setmetatable(newDialog, dialogsClass_mt);
 
@@ -77,7 +79,14 @@ function dialogsClass:okPressed(event)
 	self:hideDialog();
 end
 
+function dialogsClass:showDialog()
+	self.dialogGroup.alpha = 1;
+	self.dialogOkButton:setEnabled(true);
+end
+
 function dialogsClass:hideDialog()
+	self.dialogGroup.alpha = 0;
+	self.dialogOkButton:setEnabled(false);
 end
 
 function dialogsClass:listen()

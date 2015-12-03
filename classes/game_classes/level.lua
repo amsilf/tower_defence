@@ -32,6 +32,8 @@ levelClass = {
 
 	nextWaveButtons = {},
 
+	isTimeStopped = true,
+
 	bezierTime = 0,
 	
 	absTime = 1,
@@ -79,6 +81,7 @@ end
 
 -- builder
 function levelClass:initMainDisplay(imagePath)
+	-- FIXME: config
 	self.backgroundImage = display.newImage(imagePath, 450, 400);
 	self.backgroundImage:toBack();
 
@@ -277,6 +280,10 @@ function levelClass:dicreaseHealth()
 end
 
 function levelClass:onTick()
+	if(self.isTimeStopped == true) then
+		return;
+	end
+
 	self.bezierTime = self.bezierTime + 0.01;
 
 	self:objectsMovments();
@@ -430,10 +437,12 @@ end
 
 function levelClass:startTimer()
 	timer.performWithDelay(10, self, 0);
+	self.isTimeStopped = false;
 end
 
 function levelClass:stopTimer()
 	timer.pause();
+	self.isTimeStopped = true;
 end
 
 return levelClass;
