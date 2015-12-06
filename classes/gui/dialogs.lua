@@ -75,6 +75,7 @@ function dialogsClass.new(params, level)
 	newDialog.dialogGroup:insert( newDialog.dialogBorder );
 	newDialog.dialogGroup:insert( newDialog.dialogOkButton );
 	newDialog.dialogGroup:insert( newDialog.speakerImage );
+	newDialog.dialogGroup:insert( newDialog.speakerTitle );
 	newDialog.dialogGroup:insert( newDialog.dialogTextArea );
 
 	setmetatable(newDialog, dialogsClass_mt);
@@ -109,6 +110,7 @@ function dialogsClass:listen()
 
 	self.dialogOkButton:addEventListener("touch", self.dialogOkButton);
 end
+
 
 return dialogsClass;
 

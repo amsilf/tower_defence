@@ -14,6 +14,8 @@ unitClass = {
 	sprite = nil,
 	unitGroup = nil,
 	healthBar = nil,
+
+
 	maxHealth = 100,
 	currHealth = 100,
 	speed = 1,
@@ -22,6 +24,9 @@ unitClass = {
 	parentWave = nil,
 	
 	-- path related properties
+	numbereInWave = 0,
+	unitsPerRow = 0,
+
 	timeShift = 0,
 	angel = 0,
 	shift_x = 0,
@@ -45,9 +50,17 @@ function unitClass.new(params, timeShift, parentWave)
 		armor = 0,
 		
 		-- path related properties
+		numberInWave = 0,
+		unitsPerRow = 0,
+
 		angel = 0,
 		shift_x = 0,
 		shift_y = 0,
+
+		-- bezier coordinates
+		coreX = 0,
+		coreY = 0,
+
 		points_x = {},
 		points_y = {}
 	};
@@ -75,6 +88,10 @@ function unitClass.new(params, timeShift, parentWave)
 
 	newUnit.unitGroup:insert(newUnit.healthBar);
 
+	-- FIXME: for test
+	newUnit.shift_row = 70;
+	newUnit.shift_column = 30;
+
 	setmetatable(newUnit, unitClass_mt);
 
 	return newUnit;
@@ -90,6 +107,19 @@ function initUnitSprite(type)
 	local unitSheet = graphics.newImageSheet("resources/units/mariner_animation.png", unitOptions);
 
 	return display.newSprite(unitSheet, sprites_sequences["unit"])
+end
+
+function unitClass:setNumberInWave(i)
+	self.numberInWave = i;
+end
+
+function unitClass:setUnitsPerRow(num)
+	self.unitsPerRow = num;
+end
+
+function unitClass:setCoreCoordinates(x, y)
+	self.coreX = x;
+	self.coreY = y;
 end
 
 function unitClass:decreaseHealt(value)
@@ -124,11 +154,6 @@ function unitClass:setPosition(x, y)
 	self.unitGroup.y = y;
 end
 
-function unitClass:setShift(x, y)
-	self.shift_x = x;
-	self.shift_y = y;
-end
-
 function unitClass:destroyUnit()
 
 	if (self.sprite ~= nil) then
@@ -145,6 +170,26 @@ function unitClass:destroyUnit()
 		self.unitGroup:removeSelf();
 		self.unitGroup = nil;
 	end	
+
+end
+
+function unitClass:calculateMovmentDirection(currPosX, currPosY, newPosX, newPosY)
+	
+	if( math.abs(currPosX - newPosX) > 1 ) then
+		if (currPosX - newPosX < 0) then
+			return "right_to_left";
+		else
+			return "left_to_right";
+		end
+	end
+
+	if( math.abs(currPosY - newPosY) > 1 ) then
+		if(currPosY - newPosY > 0) then
+			return "up_to_down";
+		else
+			return "down_to_up";
+		end
+	end
 
 end
 
@@ -173,14 +218,49 @@ function unitClass:calculateUnitPosition(tick, path)
 	local bezierX = unitClass.calculateBizerApproximation(tick - self.timeShift, pointsX);
 	local bezierY = unitClass.calculateBizerApproximation(tick - self.timeShift, pointsY);
 
-	local newUnitPosX = bezierX + self.shift_x;
-	local newUnitPosY = bezierY + self.shift_y;
-
-	local unitAngel = self.angel;
-	
 	local currentPosX = self.unitGroup.x;
 	local currentPosY = self.unitGroup.y;
 
+	local newUnitPosX = bezierX;
+	local newUnitPosY = bezierY;
+	
+	-- FIXME: works only for 1 and 2 units per row
+	if (self.unitsPerRow > 1) then
+		local direction = self:calculateMovmentDirection(self.coreX, self.coreY, newUnitPosX, newUnitPosY);
+
+		local rowNum = math.round(self.numberInWave / self.unitsPerRow);
+		if (direction == "right_to_left" or direction == "left_to_right") then
+			
+			if (direction == "right_to_left") then
+				newUnitPosX = newUnitPosX - rowNum * self.shift_row;
+			else
+				newUnitPosX = newUnitPosX + rowNum * self.shift_row;
+			end
+			
+			if (self.numberInWave % self.unitsPerRow == 0) then 
+				newUnitPosY = newUnitPosY + self.shift_column;
+			else
+				newUnitPosY = newUnitPosY - self.shift_column;
+			end
+		end
+
+		if (direction == "up_to_down" or direction == "down_to_up") then
+			if (direction == "up_to_down") then
+				newUnitPosY = newUnitPosY - rowNum * self.shift_row;
+			else
+				newUnitPosY = newUnitPosY + rowNum * self.shift_row;
+			end
+
+			if (self.numberInWave % self.unitsPerRow == 0) then 
+				newUnitPosX = newUnitPosX + self.shift_column;
+			else
+				newUnitPosX = newUnitPosX - self.shift_column;
+			end
+		end
+	end
+
+	local unitAngel = self.angel;
+	
 	-- 0.393 - rotation angel in rad, 22.5 degrees
 	local basicRad = 0.393;
 	local basicAngel = 22.5;
@@ -209,6 +289,7 @@ function unitClass:calculateUnitPosition(tick, path)
 		self.angel = angelNew;
 	end
 
+	self:setCoreCoordinates(bezierX, bezierY);
 	self:setPosition(newUnitPosX, newUnitPosY);
 end
 

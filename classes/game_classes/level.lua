@@ -284,7 +284,7 @@ function levelClass:onTick()
 		return;
 	end
 
-	self.bezierTime = self.bezierTime + 0.01;
+	self.bezierTime = self.bezierTime + 0.005;
 
 	self:objectsMovments();
 
@@ -442,7 +442,7 @@ end
 
 function levelClass:stopTimer()
 	timer.pause();
-	self.isTimeStopped = true;
+	self.isTimeStopped = true;	
 end
 
 return levelClass;

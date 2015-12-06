@@ -88,22 +88,25 @@ function waveClass:initUnits()
 	local tickDelta = 0.01;
 
 	local currTimeShift = nil;
+	local currAxisXShift = 10;
+	local currAxisYShift = 30;
+
 	for i = 1, self.numUnits do
 
 		units_parameters["id"] = "wave_" .. self.id .. "_unit_" .. i;
 
-		currTimeShift = ( 1 / self.numUnits ) * i * 0.01;
-		tmpUnit = unitClass.new(units_parameters, currTimeShift, self);
-
-		tmpUnit:setPosition( startEndPoints["start_x"], startEndPoints["start_y"]);
-
-		-- FIXME move these params into config
-		-- FIXME think about proper shift
-		tmpUnit:setShift(70 * i, 0);	
-
 		if (i % self.unitsPerRow == 0) then
 			row_number = row_number + 1;
+
+			currTimeShift = ( 1 / self.numUnits ) * i * 0.01;
 		end
+
+		tmpUnit = unitClass.new(units_parameters, currTimeShift, self);
+
+		tmpUnit:setUnitsPerRow(self.unitsPerRow);
+		tmpUnit:setNumberInWave(i);
+
+		tmpUnit:setPosition( startEndPoints["start_x"], startEndPoints["start_y"]);
 
 		table.insert(self.units, tmpUnit);
 	end
