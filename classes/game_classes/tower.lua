@@ -289,6 +289,7 @@ function towerClass:towerRotation(tick)
 
 	-- first quarter - 0 < alpha < 90
 	if (unitX > towerX and unitY < towerY) then
+		-- FIXME: revise unitY - towerX !!!
 		angelTowerUnit = math.atan( ( unitY - towerX ) / ( unitY - towerY ) );
 	-- second quatert - 270 < alpha < 360
 	elseif (unitX < towerX and unitY < towerY) then

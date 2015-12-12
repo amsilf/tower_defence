@@ -28,7 +28,7 @@ unitClass = {
 	unitsPerRow = 0,
 
 	timeShift = 0,
-	angel = 0,
+	angle = 0,
 	shift_x = 0,
 	shift_y = 0,
 	points_x = nil,
@@ -53,7 +53,7 @@ function unitClass.new(params, timeShift, parentWave)
 		numberInWave = 0,
 		unitsPerRow = 0,
 
-		angel = 0,
+		angle = 0,
 		shift_x = 0,
 		shift_y = 0,
 
@@ -89,8 +89,8 @@ function unitClass.new(params, timeShift, parentWave)
 	newUnit.unitGroup:insert(newUnit.healthBar);
 
 	-- FIXME: for test
-	newUnit.shift_row = 70;
-	newUnit.shift_column = 30;
+	newUnit.shift_row = 80;
+	newUnit.shift_column = 40;
 
 	setmetatable(newUnit, unitClass_mt);
 
@@ -259,38 +259,67 @@ function unitClass:calculateUnitPosition(tick, path)
 		end
 	end
 
-	local unitAngel = self.angel;
-	
-	-- 0.393 - rotation angel in rad, 22.5 degrees
-	local basicRad = 0.393;
-	local basicAngel = 22.5;
+	local unitAngle = self.angle;
+	local angleNew = 0;
 
-	-- FIXME: revise rotation angel construction
-	local angelNew = math.acos( (newUnitPosX - currentPosX) 
-			/ math.sqrt( math.pow(newUnitPosX - currentPosX, 2) + math.pow(newUnitPosY - currentPosY, 2) ));
+	-- first quarter - 0 < alpha < 90
+	if (self.coreX < bezierX and self.coreY > bezierY) then
+		angleNew = unitClass.atanRound ( math.atan( (self.coreY - bezierY) / (bezierX - self.coreX) ) );
 
+	-- second quarter - 270 < alpha < 360
+	elseif (self.coreX > bezierX and self.coreY > bezierY) then
+		-- 3.13 = rad (180)
+		angleNew = unitClass.atanRound ( math.atan( (self.coreY - bezierY) / (self.coreX - bezierX) ) + 3.13);
+
+	-- third quarter - 180 < alpha < 270
+	elseif (self.coreX > bezierX and self.coreY < bezierY) then
+		-- 4.7 = rad (270)
+		angleNew = unitClass.atanRound ( 4.7 - math.atan( (self.coreX - bezierX) / (bezierY - self.coreY) ) );
+
+	-- forth quarter - 90 < alpha < 180
+	elseif (self.coreX < bezierX and self.coreY < bezierY) then
+		-- 1.57 = rad (90)
+		angleNew = unitClass.atanRound ( math.atan( (bezierY - self.coreY) / (bezierX - self.coreX) ) + 1.57);
+	end
+
+	-- radians to degrees
+	angleNew = math.deg(angleNew);
+
+	local basicAngle = 22.5;
 	local isUnitAnimationChanged = false;
-	if ( math.abs(angelNew - unitAngel) > basicRad ) then
-		isUnitAnimationChanged = true;
-		
-		-- 0, 15 - because 16 frames
-		for i = 0, 15 do
-			if (angelNew > (basicRad * i) and angelNew < (basicRad * (i + 1)) ) then
-				local movementType = (i * basicAngel) .. "_degree_run";
-				self.sprite:setSequence( movementType );
+
+
+	local closestAngle = 0;
+	for i = 0, 15 do
+		if (angleNew > basicAngle * i and angleNew < basicAngle * (i + 1) ) then
+			if ( math.abs(angleNew - basicAngle * i) < math.abs(angleNew - basicAngle * (i + 1)) ) then
+				closestAngle = basicAngle * i;
+			else
+				closestAngle = basicAngle * (i + 1);
 			end
 		end
-
 	end
+	
+	if (unitAngle ~= closestAngle) then
+		isUnitAnimationChanged = true;
+
+		local movementType = closestAngle .. "_degree_run";
+		self.sprite:setSequence( movementType );
+	end
+
 
 	if (isUnitAnimationChanged == true) then
 		self.sprite:play();
 		isUnitAnimationChanged = false;
-		self.angel = angelNew;
+		self.angle = closestAngle;
 	end
 
 	self:setCoreCoordinates(bezierX, bezierY);
 	self:setPosition(newUnitPosX, newUnitPosY);
+end
+
+function unitClass.atanRound(t)
+    return math.round( t * 1000 ) * 0.001;
 end
 
 -- FIXME: factorial calculations could be cached

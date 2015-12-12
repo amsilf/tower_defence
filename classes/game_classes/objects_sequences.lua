@@ -10,7 +10,7 @@ sprites_sequences={};
 -- 360 / 16 = 22.5, 22.5 in rad = 0.393
 local running_unit_sequence = {
 	{
-		name = "90_degree_run",
+		name = "270_degree_run",
 		start = 1,
 		count = 12,
 		time = 500,
@@ -19,7 +19,7 @@ local running_unit_sequence = {
 	},
 	
 	{
-		name = "67.5_degree_run",
+		name = "292.5_degree_run",
 		start = 13,
 		count = 12,
 		time = 500,
@@ -28,7 +28,7 @@ local running_unit_sequence = {
 	},
 
 	{
-		name = "45_degree_run",
+		name = "315_degree_run",
 		start = 25,
 		count = 12,
 		time = 500,
@@ -37,7 +37,7 @@ local running_unit_sequence = {
 	},
 
 	{
-		name = "22.5_degree_run",
+		name = "337.5_degree_run",
 		start = 37,
 		count = 12,
 		time = 500,
@@ -55,7 +55,7 @@ local running_unit_sequence = {
 	},
 
 	{
-		name = "337.5_degree_run",
+		name = "22.5_degree_run",
 		start = 61,
 		count = 12,
 		time = 500,
@@ -64,7 +64,7 @@ local running_unit_sequence = {
 	},
 
 	{
-		name = "315_degree_run",
+		name = "45_degree_run",
 		start = 73,
 		count = 12,
 		time = 500,
@@ -73,7 +73,7 @@ local running_unit_sequence = {
 	},
 
 	{
-		name = "292.5_degree_run",
+		name = "67.5_degree_run",
 		start = 85,
 		count = 12,
 		time = 500,
@@ -82,7 +82,7 @@ local running_unit_sequence = {
 	},
 
 	{
-		name = "270_degree_run",
+		name = "90_degree_run",
 		start = 97,
 		count = 12,
 		time = 500,
@@ -91,7 +91,7 @@ local running_unit_sequence = {
 	},
 
 	{
-		name = "247.5_degree_run",
+		name = "112.5_degree_run",
 		start = 109,
 		count = 12,
 		time = 500,
@@ -100,7 +100,7 @@ local running_unit_sequence = {
 	},
 
 	{
-		name = "225_degree_run",
+		name = "135_degree_run",
 		start = 121,
 		count = 12,
 		time = 500,
@@ -109,7 +109,7 @@ local running_unit_sequence = {
 	},
 
 	{
-		name = "202.5_degree_run",
+		name = "157.5_degree_run",
 		start = 133,
 		count = 12,
 		time = 500,
@@ -127,7 +127,7 @@ local running_unit_sequence = {
 	},
 
 	{
-		name = "157.5_degree_run",
+		name = "202.5_degree_run",
 		start = 157,
 		count = 12,
 		time = 500,
@@ -136,7 +136,7 @@ local running_unit_sequence = {
 	},
 
 	{
-		name = "135_degree_run",
+		name = "225_degree_run",
 		start = 169,
 		count = 12,
 		time = 500,
@@ -145,7 +145,7 @@ local running_unit_sequence = {
 	},
 
 	{
-		name = "112.5_degree_run",
+		name = "247.5_degree_run",
 		start = 181,
 		count = 12,
 		time = 500,
