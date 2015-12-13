@@ -284,14 +284,14 @@ function levelClass:onTick()
 		return;
 	end
 
-	self.bezierTime = self.bezierTime + 0.005;
+	self.bezierTime = self.bezierTime + 0.003;
 
 	self:objectsMovments();
 
 	-- TODO: thinks about proper timing implementation
+	-- movment speed control
 	-- bezier constant
 	-- FIXME: advanced threshold calculation
-	-- FIXME: stop / start time mechanism
 	if (self.bezierTime > 1.2) then
 		self.bezierTime = 0;
 	end

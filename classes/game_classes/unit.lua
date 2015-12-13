@@ -80,7 +80,7 @@ function unitClass.new(params, timeShift, parentWave)
 	-- FIXME: review number
 	-- width is 80
 	newUnit.healthBar = display.newRect(-5, -45, 35, 7);
-
+	
 	newUnit.healthBar:setFillColor(0, 10, 0);
 
 	newUnit.healthBar.strokeWidth = 0.5;
@@ -141,11 +141,11 @@ function unitClass:updateHealthBar()
 		self.healthBar:setFillColor(10, 0, 0);
 	end
 
-	local scaleRate = (100 - self.currHealth) / 100;
-	print("scale rate [ " .. scaleRate .. " ]");
+	local scaleRate = self.currHealth / 100;
+	print("scale rate [ " .. scaleRate .. " ], health [ " .. self.currHealth .. " ]");
 
 	-- FIXME 80 is the bar width, will be moved into const
-	local ratio = 80 / self.currHealth;
+	-- local ratio = 80 / self.currHealth;
 	self.healthBar:scale(scaleRate, 1);
 end
 
@@ -262,6 +262,8 @@ function unitClass:calculateUnitPosition(tick, path)
 	local unitAngle = self.angle;
 	local angleNew = 0;
 
+	-- specific way of angle calcultion - start from 270
+
 	-- first quarter - 0 < alpha < 90
 	if (self.coreX < bezierX and self.coreY > bezierY) then
 		angleNew = unitClass.atanRound ( math.atan( (self.coreY - bezierY) / (bezierX - self.coreX) ) );
@@ -274,7 +276,7 @@ function unitClass:calculateUnitPosition(tick, path)
 	-- third quarter - 180 < alpha < 270
 	elseif (self.coreX > bezierX and self.coreY < bezierY) then
 		-- 4.7 = rad (270)
-		angleNew = unitClass.atanRound ( 4.7 - math.atan( (self.coreX - bezierX) / (bezierY - self.coreY) ) );
+		angleNew = unitClass.atanRound (4.7 - math.atan( (self.coreX - bezierX) / (bezierY - self.coreY) ) );
 
 	-- forth quarter - 90 < alpha < 180
 	elseif (self.coreX < bezierX and self.coreY < bezierY) then
@@ -286,8 +288,6 @@ function unitClass:calculateUnitPosition(tick, path)
 	angleNew = math.deg(angleNew);
 
 	local basicAngle = 22.5;
-	local isUnitAnimationChanged = false;
-
 
 	local closestAngle = 0;
 	for i = 0, 15 do
@@ -299,18 +299,12 @@ function unitClass:calculateUnitPosition(tick, path)
 			end
 		end
 	end
-	
-	if (unitAngle ~= closestAngle) then
-		isUnitAnimationChanged = true;
 
+	if (unitAngle ~= closestAngle) then
 		local movementType = closestAngle .. "_degree_run";
 		self.sprite:setSequence( movementType );
-	end
 
-
-	if (isUnitAnimationChanged == true) then
 		self.sprite:play();
-		isUnitAnimationChanged = false;
 		self.angle = closestAngle;
 	end
 
@@ -323,6 +317,7 @@ function unitClass.atanRound(t)
 end
 
 -- FIXME: factorial calculations could be cached
+
 -- basic calcualtion based on wikipeia article
 -- https://ru.wikipedia.org/wiki/Кривая_Безье
 function unitClass.calculateBizerApproximation(tick, points)

@@ -18,6 +18,7 @@ towerClass = {
 	price = 100,
 
 	aim = nil,
+	currentAngle = nil,
 
 	nextShotTime = 0,
 
@@ -88,7 +89,6 @@ function towerClass.new(type, params, level)
 		});
 
 	newTower.upgradeButton.alpha = btnUpgradeParams["alpha"];
-
 	newTower.towerGroup:insert(newTower.upgradeButton);
 
 	local btnSellParams = params["gui"]["btnSell"];
@@ -122,7 +122,7 @@ function towerClass.initTowerSprite(params)
 
 	local towerSheet = graphics.newImageSheet(towerSpriteParams["tower_sheet"], towerOptions);
 
-	return display.newSprite(towerSheet, sprites_sequences["tower"])
+	return display.newSprite(towerSheet, sprites_sequences["tower"]);
 end
 
 function towerClass:hideMenu()
@@ -283,47 +283,47 @@ function towerClass:towerRotation(tick)
 
 	-- tower animation
 
-	local angelTowerUnit = 0;
+	local angleTowerUnit = 0;
 
-	-- specific way of alpha calcultion - start from 270
+	-- specific way of angle calcultion - start from 270
 
 	-- first quarter - 0 < alpha < 90
 	if (unitX > towerX and unitY < towerY) then
 		-- FIXME: revise unitY - towerX !!!
-		angelTowerUnit = math.atan( ( unitY - towerX ) / ( unitY - towerY ) );
+		angleTowerUnit = math.atan( ( unitY - towerX ) / ( unitY - towerY ) );
 	-- second quatert - 270 < alpha < 360
 	elseif (unitX < towerX and unitY < towerY) then
 		-- 4.7 = rad (270)
-		angelTowerUnit = math.atan( ( towerY - unitY ) / ( towerX - unitX )  ) + 4.7;
+		angleTowerUnit = math.atan( ( towerY - unitY ) / ( towerX - unitX )  ) + 4.7;
 	-- third quarter - 180 alpha < 270
 	elseif(unitX < towerX and unitY > towerY) then
 		-- 3.13 = rad (180)
-		angelTowerUnit = math.atan( ( unitY - towerY ) / ( towerX - unitX ) ) + 3.14;
+		angleTowerUnit = math.atan( ( unitY - towerY ) / ( towerX - unitX ) ) + 3.14;
 	-- fourth quarter - 90 alpha < 180
 	elseif (unitX > towerX and unitY > towerY) then
 		-- 1.57 = rad (90)
-		angelTowerUnit = math.atan( ( unitY - towerY ) / ( towerX - unitX ) ) + 1.57;
+		angleTowerUnit = math.atan( ( unitY - towerY ) / ( towerX - unitX ) ) + 1.57;
 	end
 
-
-	local isTowerAnimationChanged = false;
-
 	local basicRad = 0.393;
+	
+	-- FIXME make it similar to unit approach !!!
 
 	for i = 0, 15 do
-		if (angelTowerUnit > (basicRad * i) and angelTowerUnit < (basicRad * (i + 1)) ) then
-			isTowerAnimationChanged = true;
-
-			-- 22.5 is a basic rad in degrees
-			local movementType = (i * 22.5) .. "_degree_fire";
-			self.sprite:setSequence( movementType );
+		if (angleTowerUnit > (basicRad * i) and angleTowerUnit < (basicRad * (i + 1)) ) then
+			angleTowerUnit = i * 22.5
 		end
 	end
 
-	if (isTowerAnimationChanged == true) then
+
+	if (angleTowerUnit ~= self.currentAngle) then
+		local animationType = angleTowerUnit .. "_degree_fire";
+		self.sprite:setSequence( animationType );
+
 		self.sprite:play();
-		isTowerAnimationChanged = false;
+		self.currentAngle = angleTowerUnit;
 	end
+
 end
 
 return towerClass;

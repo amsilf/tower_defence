@@ -98,6 +98,7 @@ function waveClass:initUnits()
 		if (i % self.unitsPerRow == 0) then
 			row_number = row_number + 1;
 
+			-- FIXME think about that
 			currTimeShift = ( 1 / self.numUnits ) * i * 0.01;
 		end
 
